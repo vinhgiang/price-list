@@ -1,0 +1,243 @@
+@font-face {
+    font-family: 'sourcesanspro';
+    src: url('#{$font-path}/sourcesanspro-regular.eot');
+    src: url('#{$font-path}/sourcesanspro-regular.eot?#iefix') format('embedded-opentype'),
+    url('#{$font-path}/sourcesanspro-regular.woff') format('woff'),
+    url('#{$font-path}/sourcesanspro-regular.woff2') format('woff2'),
+    url('#{$font-path}/sourcesanspro-regular.ttf') format('truetype'),
+    url('#{$font-path}/sourcesanspro-regular.svg#sourcesanspro-regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sourcesanspro-semibold';
+    src: url('#{$font-path}/sourcesanspro-semibold.eot');
+    src: url('#{$font-path}/sourcesanspro-semibold.eot?#iefix') format('embedded-opentype'),
+    url('#{$font-path}/sourcesanspro-semibold.woff') format('woff'),
+    url('#{$font-path}/sourcesanspro-semibold.woff2') format('woff2'),
+    url('#{$font-path}/sourcesanspro-semibold.ttf') format('truetype'),
+    url('#{$font-path}/sourcesanspro-semibold.svg#sourcesanspro-semibold') format('svg');
+    font-style: normal;
+    font-weight: 600;
+}
+
+
+$EasingQuadIn: cubic-bezier(0.550, 0.085, 0.680, 0.530);
+$EasingCubicIn: cubic-bezier(0.550, 0.055, 0.675, 0.190);
+$EasingQuartIn: cubic-bezier(0.895, 0.030, 0.685, 0.220);
+$EasingQuintIn: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+$EasingSineIn: cubic-bezier(0.470, 0.000, 0.745, 0.715);
+$EasingExpoIn: cubic-bezier(0.950, 0.050, 0.795, 0.035);
+$EasingCircIn: cubic-bezier(0.600, 0.040, 0.980, 0.335);
+$EasingBackIn: cubic-bezier(0.600, 0, 0.735, 0.045);
+
+$EasingQuadOut: cubic-bezier(0.250, 0.460, 0.450, 0.940);
+$EasingCubicOut: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+$EasingQuartOut: cubic-bezier(0.165, 0.840, 0.440, 1.000);
+$EasingQuintOut: cubic-bezier(0.230, 1.000, 0.320, 1.000);
+$EasingSineOut: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+$EasingExpoOut: cubic-bezier(0.190, 1.000, 0.220, 1.000);
+$EasingCircOut:cubic-bezier(0.075, 0.820, 0.165, 1.000);
+$EasingBackOut: cubic-bezier(0.175, 0.885, 0.320, 1);
+
+$EasingQuadInOut: cubic-bezier(0.455, 0.030, 0.515, 0.955);
+$EasingCubicInOut: cubic-bezier(0.645, 0.045, 0.355, 1.000);
+$EasingQuartInOut: cubic-bezier(0.770, 0.000, 0.175, 1.000);
+$EasingQuintInOut: cubic-bezier(0.860, 0.000, 0.070, 1.000);
+$EasingSineInOut: cubic-bezier(0.445, 0.050, 0.550, 0.950);
+$EasingExpoInOut: cubic-bezier(1.000, 0.000, 0.000, 1.000);
+$EasingCircInOut: cubic-bezier(0.785, 0.135, 0.150, 0.860);
+$EasingBackInOut: cubic-bezier(0.680, 0, 0.265, 1);
+$EasingOut: cubic-bezier(.37,.15,.32,.94);
+
+
+@mixin TransitionWithDurationAndEase($duration, $easing) {
+    -webkit-transition: all $duration $easing;
+    -moz-transition: all $duration $easing;
+    -ms-transition: all $duration $easing;
+    -o-transition: all $duration $easing;
+    transition: all $duration $easing;
+}
+
+@mixin TransitionWithDurationAndEaseAddItem($duration, $easing, $addItemTransition) {
+    -webkit-transition: all $duration $easing, $addItemTransition;
+    -moz-transition: all $duration $easing, $addItemTransition;
+    -ms-transition: all $duration $easing, $addItemTransition;
+    -o-transition: all $duration $easing, $addItemTransition;
+    transition: all $duration $easing, $addItemTransition;
+}
+
+
+@mixin TransitionWithDurationAndEase_delay($duration, $easing, $delay) {
+    -webkit-transition: all $duration $easing $delay;
+    -moz-transition: all $duration $easing $delay;
+    -ms-transition: all $duration $easing $delay;
+    -o-transition: all $duration $easing $delay;
+    transition: all $duration $easing $delay;
+}
+
+@mixin TransitionWithDurationAndEaseAddItem_delay($duration, $easing, $delay, $addItemTransition) {
+    -webkit-transition: all $duration $easing $delay, $addItemTransition;
+    -moz-transition: all $duration $easing $delay, $addItemTransition;
+    -ms-transition: all $duration $easing $delay, $addItemTransition;
+    -o-transition: all $duration $easing $delay, $addItemTransition;
+    transition: all $duration $easing $delay, $addItemTransition;
+}
+
+
+@mixin centerTransformOrigin {
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+}
+
+
+@mixin transformOrigin($x, $y) {
+    -webkit-transform-origin: $x $y;
+    -moz-transform-origin: $x $y;
+    -ms-transform-origin: $x $y;
+    -o-transform-origin: $x $y;
+    transform-origin: $x $y;
+}
+
+
+@mixin transformScale($scale){
+    -webkit-transform: scale($scale);
+    -moz-transform: scale($scale);
+    -ms-transform: scale($scale);
+    -o-transform: scale($scale);
+    transform: scale($scale);
+}
+
+
+@mixin translate($x, $y){
+    -webkit-transform: translate($x, $y);
+    -moz-transform: translate($x, $y);
+    -ms-transform: translate($x, $y);
+    -o-transform: translate($x, $y);
+    transform: translate($x, $y);
+}
+
+
+@mixin fontDefault($fontName, $fontSize, $fontWeight, $fontColor){
+    font-family: $fontName;
+    font-size: $fontSize;
+    font-weight: $fontWeight;
+    color: $fontColor;
+}
+
+
+@mixin fontStyle ($fontName, $fontSize, $fontWeight, $lineHeight, $padding, $marginBottom){
+    font-family: $fontName;
+    font-size: $fontSize;
+    font-weight: $fontWeight;
+    line-height: $lineHeight;
+    padding: $padding;
+    margin-bottom: $marginBottom;
+}
+
+@mixin fontBold ($fontName, $fontWeight, $fontStyle){
+    font-family: $fontName;
+    font-weight: $fontWeight;
+    font-style: $fontStyle;
+}
+
+*{
+    margin:0px;
+    padding:0px;
+    -webkit-font-smoothing: antialiased;
+    //transform:translate3d( 0, 0, 0);
+    text-shadow: rgba(0,0,0,.01) 0 0 1px;
+    -moz-osx-font-smoothing: grayscale;
+
+    -ms-text-size-adjust:100%;
+    -webkit-text-size-adjust:100%
+}
+
+
+
+//loading
+// scaling... any units
+$width: 50px;
+
+#loading {
+    position: fixed;
+    top: 0; bottom: 0; left: 0; right: 0;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+    z-index: 9999;
+}
+
+// end demo-specific
+
+.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    @include translate(-50%, -50%);
+    width: $width;
+    &:before {
+        content:'';
+        display: block;
+        padding-top: 100%;
+    }
+}
+
+.circular {
+    animation: rotate 2s linear infinite;
+    height: 100%;
+    transform-origin: center center;
+    width: 100%;
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    margin: auto;
+}
+
+
+.path {
+    stroke-dasharray: 1,200;
+    stroke-dashoffset: 0;
+    animation:
+        dash 1.5s ease-in-out infinite,
+        color 6s ease-in-out infinite;
+    stroke-linecap: round;
+}
+
+@keyframes rotate{
+    100%{
+        transform: rotate(360deg);
+    }
+}
+@keyframes dash{
+    0%{
+        stroke-dasharray: 1,200;
+        stroke-dashoffset: 0;
+    }
+    50%{
+        stroke-dasharray: 89,200;
+        stroke-dashoffset: -35px;
+    }
+    100%{
+        stroke-dasharray: 89,200;
+        stroke-dashoffset: -124px;
+    }
+}
+@keyframes color{
+    100%, 0%{
+        stroke: #000;
+    }
+    40%{
+        stroke: #000;
+    }
+    66%{
+        stroke: #000;
+    }
+    80%, 90%{
+        stroke: #000;
+    }
+}
+//END loading

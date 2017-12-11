@@ -1,0 +1,320 @@
+body {
+	margin: 0;
+    color: #121212;
+}
+
+button, a {
+    text-decoration: none;
+    box-shadow: none;
+    outline: 0;
+	&:active, &:focus, &:hover {
+		text-decoration: none;
+		box-shadow: none;
+		outline: 0;
+	}
+}
+
+ul, ol {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+input, textarea {
+	&:focus {
+		outline: none !important;
+		box-shadow: none !important;
+	}
+}
+
+h1, h2, h3, h4, h5, h6, a, p, li, span, b, i, strong, label, input, th, td, select {
+    font-family: $fontName;
+    margin: 0;
+}
+
+a {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.text-bold {
+    font-weight: 500 !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.no-long-words {
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	-ms-word-break: break-all;
+	word-break: break-all;
+	word-break: break-word;
+	-ms-hyphens: auto;
+	-moz-hyphens: auto;
+	-webkit-hyphens: auto;
+	hyphens: auto;
+}
+
+.truncate-long-word {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.prevent-default {
+	pointer-events: none;
+}
+
+.no-margin-top {
+	margin-top: 0 !important;
+}
+.no-margin-bottom {
+	margin-bottom: 0 !important;
+}
+.no-margin-left {
+	margin-left: 0 !important;
+}
+.no-margin-right {
+	margin-right: 0 !important;
+}
+
+
+.remove-scrollbar {
+	&::-webkit-scrollbar { 
+	  display: none;
+	}
+	@-moz-document url-prefix() {
+	  padding-right: 17px;
+	  width: 100%;
+	}
+}
+
+.text-justify {text-align: justify};
+.text-center {text-align: center;}
+.text-left {text-align: left;}
+.text-right {text-align: right;}
+.text-uppercase {text-transform: uppercase;}
+.text-underline {text-decoration: underline;}
+.clbt:before, .clbt:after {display: table; content: '';}
+.clbt:after {clear: both;}
+.fl {float: left;}
+.fr {float: right;}
+.fntBt {@include fontBold($fontName, $fontBold, normal)}
+.fntNm {@include fontBold($fontName, $fontRegular, normal)}
+em, i {@include fontBold($fontName, $fontRegular, italic)}
+b, strong {@include fontBold($fontName, $fontBold, normal)}
+.mb20 {margin-bottom: 20px;}
+.mb30 {margin-bottom: 30px;}
+.mt30 {margin-top: 30px;}
+.block {display: block;width: 100%;}
+.white {color: $white;}
+
+.nBA {
+    &:before, &:after {
+        content: normal !important;
+    }
+}
+.hide {display: none !important;}
+.clearAfter:after
+{
+    clear: both;
+    content: "";
+    display: block;
+}
+
+.title-lg {
+    @include fontStyle($fontName, 90px, $fontLight, normal, 0, 20px);
+    font-weight: normal;
+    @media screen and (max-width: 640px){
+        font-size: 40px;
+    }
+}
+
+
+.title-md {
+    @include fontStyle($fontName, 32px, $fontLight, normal, 0, 10px);
+    font-weight: normal;
+    @media screen and (max-width: 1020px){
+        font-size: 30px;
+    }
+    @media screen and (max-width: 640px){
+        font-size: 22px;
+    }
+}
+
+
+.title-sm {
+    @include fontStyle($fontName, 24px, $fontLight, normal, 0, 10px);
+    font-weight: normal;
+
+    @media screen and (max-width: 1020px){
+        font-size: 25px;
+    }
+
+    @media screen and (max-width: 640px){
+        font-size: 20px;
+    }
+}
+
+
+.title-xs {
+    @include fontStyle($fontName, 23px, $fontLight, normal, 5px 0, 0);
+    font-weight: normal;
+    @media screen and (max-width: 1020px){
+        font-size: 18px;
+    }
+}
+
+.title-xs-inner {
+    @include fontStyle($fontName, 18px, $fontLight,normal, 0 0 10px, 0);
+    font-weight: normal;
+    @include TransitionWithDurationAndEase(.2s, $EasingOut);
+}
+
+$wCol: 8.3333%;
+.col-5 {
+    min-height: 1px;
+    margin-bottom: 4px;
+    @media screen and (min-width: 640px){
+        width: $wCol * 5;
+        float: left;
+        margin-bottom: 0;
+        padding: 0 2px;
+    }
+}
+
+.col-2 {
+    @extend .col-5;
+    @media screen and (min-width: 640px){
+        width: $wCol * 2;
+        float: left;
+    }
+}
+
+
+.col-3 {
+    @extend .col-5;
+    @media screen and (min-width: 640px){
+        width: $wCol * 3;
+        float: left;
+    }
+    @media screen and (max-width: 639px){
+        width: $wCol * 6;
+        padding: 0 2px;
+        float: left;
+    }
+}
+
+.col-4 {
+    @extend .col-5;
+    @media screen and (min-width: 640px){
+        width: $wCol * 4;
+        float: left;
+    }
+}
+
+.col-9 {
+    @extend .col-5;
+    @media screen and (min-width: 640px){
+        width: $wCol * 9;
+        float: left;
+    }
+}
+
+.col-6 {
+    @extend .col-5;
+    @media screen and (min-width: 640px){
+        width: $wCol * 6;
+        float: left;
+    }
+}
+
+.col-7 {
+    @extend .col-5;
+    @media screen and (min-width: 640px){
+        width: $wCol * 7;
+        float: left;
+    }
+}
+
+.col-8 {
+    @extend .col-5;
+    @media screen and (min-width: 640px){
+        width: $wCol * 8;
+        float: left;
+    }
+}
+
+.col-1 {
+    @extend .col-5;
+    @media screen and (min-width: 640px){
+        width: $wCol;
+        float: left;
+    }
+}
+
+.col-10 {
+    @extend .col-5;
+    @media screen and (min-width: 640px){
+        width: $wCol * 10;
+        float: left;
+    }
+}
+
+.col-11 {
+    @extend .col-5;
+    @media screen and (min-width: 640px){
+        width: $wCol * 11;
+        float: left;
+    }
+}
+
+
+.col-12 {
+    @extend .col-5;
+    @media screen and (min-width: 640px){
+        width: $wCol * 12;
+        float: left;
+    }
+}
+
+.container {
+    @extend .clbt;
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.row {
+    @extend .clbt;
+    margin-right: -4px;
+    margin-left: -4px;
+}
+
+.content-middle {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.text-initial {
+    text-align: initial;
+}
+
+img {
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+    vertical-align: middle;
+    max-width: 100%;
+}
+
+*, :after, :before {
+    -ms-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+

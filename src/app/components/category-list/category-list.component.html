@@ -1,0 +1,44 @@
+<h1 class="page-header">List of categories</h1>
+<div>
+    <div class="form-group row">
+        <div class="col-12">
+            <input type='text' class="realtime-filter" placeholder='Type to filter the name column' (keyup)='updateFilter($event)' />
+        </div>
+    </div>
+    <div class="form-group row">
+        <ngx-datatable #categoriesTable class='material fullscreen' [headerHeight]="50" 
+            [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [rows]='rows' [selectionType]="'single'">
+
+            <ngx-datatable-column name="ID" [width]="50" prop="_id">
+                {{value}}
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Name" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span title="Double click to edit" (dblclick)="editing[rowIndex + '-name'] = true" *ngIf=" ! editing[rowIndex + '-name']">
+                        {{value}}
+                    </span>
+                    <input autofocus (blur)="updateValue($event, 'name', rowIndex)" *ngIf="editing[rowIndex+ '-name']" type="text" [value]="value" />
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="eBay AU" [width]="200" prop="ebay_au">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span title="Double click to edit" (dblclick)="editing[rowIndex + '-ebay_au'] = true" *ngIf=" ! editing[rowIndex + '-ebay_au']">
+                        {{value}}
+                    </span>
+                    <input autofocus (blur)="updateValue($event, 'ebay_au', rowIndex)" *ngIf="editing[rowIndex+ '-ebay_au']" type="text" [value]="value" />
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="eBay UK" [width]="200" prop="ebay_uk">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span title="Double click to edit" (dblclick)="editing[rowIndex + '-ebay_uk'] = true" *ngIf=" ! editing[rowIndex + '-ebay_uk']">
+                        {{value}}
+                    </span>
+                    <input autofocus (blur)="updateValue($event, 'ebay_uk', rowIndex)" *ngIf="editing[rowIndex+ '-ebay_uk']" type="text" [value]="value" />
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+</div>
