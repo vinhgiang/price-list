@@ -12,8 +12,18 @@ export class BrandServices {
     getBrands() {
         const url = environment.domain + '/brand/list';
         return this.http.get(url).toPromise()
-            .then(Response => Response.json() )
+            .then(response => response.json() )
             .catch(err => console.log(err.message));
+    }
+
+    createBrand(brand: Brand) {
+        const url = environment.domain + '/brand/add';
+        const headers = new Headers();
+        headers.append('Content-Type', 'Application/JSON');
+        const body = brand;
+        return this.http.post(url, body, { headers } ).toPromise()
+            .then(response => response.json())
+            .catch(err => console.log(err.message) );
     }
 
     updateBrand(brand: Brand) {

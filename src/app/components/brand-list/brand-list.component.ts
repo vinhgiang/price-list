@@ -35,7 +35,7 @@ export class BrandListComponent implements OnInit {
         // this.temp = [...this.brands];
         // this.rows = this.brands;
     }
-
+    
     ngOnInit() {
         this.brandServices.getBrands()
             .then(list => {
@@ -60,14 +60,11 @@ export class BrandListComponent implements OnInit {
     }
 
     updateValue(event, cell, rowIndex) {
-        console.log('inline editing rowIndex', rowIndex)
-        this.editing[rowIndex + '-' + cell] = false;
         let newValue = event.target.value;
 
+        this.editing[rowIndex + '-' + cell] = false;
         this.brands[rowIndex][cell] = newValue;
-
         this.brands = [...this.brands];
-        console.log('UPDATED!', this.brands[rowIndex][cell]);
 
         this.brandServices.updateBrand(this.brands[rowIndex]);
     }
