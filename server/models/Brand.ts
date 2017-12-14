@@ -18,5 +18,8 @@ export class Brand extends BrandModel {
         return { status: 1 };
     }
 
-    
+    static async updateBrand(id: String | Number, data: object): Promise<object> {
+        const updatedBrand = await Brand.findByIdAndUpdate(id, data, { new: true } );
+        return { status: 1 };
+    }
 }

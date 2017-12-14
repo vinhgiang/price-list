@@ -1,16 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Http, HttpModule } from '@angular/http';
+import { Http, HttpModule, Headers } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+import { environment } from '../../environments/environment';
+import { Brand } from '../model/Brand';
 
 @Injectable()
 
 export class BrandServices {
     constructor(private http: Http) {}
 
-    getList() {
-        const url = 'http://localhost:3000/brand/list';
+    getBrands() {
+        const url = environment.domain + '/brand/list';
         return this.http.get(url).toPromise()
             .then(Response => Response.json() )
+            .catch(err => console.log(err.message));
+    }
+
+    updateBrand(brand: Brand) {
+        const url = environment.domain + '/brand/edit';
+        const headers = new Headers();
+        headers.append('Content-Type', 'Application/JSON');
+        const body = brand;
+        return this.http.post(url, body, { headers } ).toPromise()
+            .then()
             .catch(err => console.log(err.message));
     }
 }

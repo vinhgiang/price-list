@@ -10,7 +10,7 @@
             [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [rows]='rows' [selectionType]="'single'">
 
             <ngx-datatable-column name="No" [width]="50">
-                <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                <ng-template let-rowIndex="rowIndex + 1" let-row="row" ngx-datatable-cell-template>
                     {{rowIndex}}
                 </ng-template>
             </ngx-datatable-column>
@@ -24,9 +24,7 @@
                 </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="Date" prop="created" [width]="200">
-                {{value}}
-            </ngx-datatable-column>
+            <ngx-datatable-column name="Date" prop="created_string" [width]="200"></ngx-datatable-column>
         </ngx-datatable>
     </div>
 </div>
