@@ -10,12 +10,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
+import { ToastMsgComponent } from './shared/toast-msg/toast-msg.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
-    AlertPanelComponent
+    AlertPanelComponent,
+    ToastMsgComponent
   ],
   imports: [
     HttpModule,
@@ -24,6 +26,7 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserAnimationsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ ToastMsgComponent ]
 })
 export class AppModule { }

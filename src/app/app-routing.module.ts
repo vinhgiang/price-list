@@ -13,7 +13,7 @@ import { BrandAddComponent } from './components/brand-add/brand-add.component';
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { CategoryAddComponent } from './components/category-add/category-add.component';
 
-import { MatButtonModule, MatIconModule, MatCheckboxModule, MatSelectModule, MatAutocompleteModule, MatInputModule } from '@angular/material';
+import { MatButtonModule, MatIconModule, MatCheckboxModule, MatSelectModule, MatAutocompleteModule, MatInputModule, MatSnackBarModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -51,6 +51,7 @@ const config: Routes = [
         MatSelectModule,
         MatAutocompleteModule,
         MatInputModule,
+        MatSnackBarModule,
         FormsModule,
         ReactiveFormsModule,
         NgxDatatableModule
