@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { BrandServices } from '../../services/brand.services';
-import { Http, HttpModule, Headers } from '@angular/http';
 import { MatSnackBar } from '@angular/material';
 import { ToastMsgComponent } from '../../shared/toast-msg/toast-msg.component';
 
@@ -14,10 +13,9 @@ export class BrandAddComponent implements OnInit {
 
     txtName: String = '';
 
-    constructor(private http: Http, private BrandServices: BrandServices, public snackBar: MatSnackBar) { }
+    constructor(private BrandServices: BrandServices, public snackBar: MatSnackBar) { }
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     onSubmit(formValue) {
         this.BrandServices.createBrand(formValue)

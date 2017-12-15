@@ -44,10 +44,10 @@ export class PriceListComponent implements OnInit {
 
     constructor(private http: Http) {
         this.suppliers = [
-            { _id: '1', name: 'Arkansas' },
-            { _id: '2', name: 'California' },
-            { _id: '3', name: 'Florida' },
-            { _id: '4', name: 'Texas' }
+            { _id: '1', name: 'Arkansas', created: new Date() },
+            { _id: '2', name: 'California', created: new Date() },
+            { _id: '3', name: 'Florida', created: new Date() },
+            { _id: '4', name: 'Texas', created: new Date() }
         ];
 
         this.suplierCtrl = new FormControl();
@@ -56,12 +56,12 @@ export class PriceListComponent implements OnInit {
             .map(suplier => suplier ? this.filterSupliers(suplier) : this.suppliers.slice());
 
         this.brands = [
-            { _id: '1', name: 'Apple' },
-            { _id: '2', name: 'Samsung' },
-            { _id: '3', name: 'HTC' },
-            { _id: '4', name: 'Sony' },
-            { _id: '5', name: 'Xiaomi' },
-            { _id: '6', name: 'Huawei' },
+            { _id: '1', name: 'Apple', created: new Date() },
+            { _id: '2', name: 'Samsung', created: new Date() },
+            { _id: '3', name: 'HTC', created: new Date() },
+            { _id: '4', name: 'Sony', created: new Date() },
+            { _id: '5', name: 'Xiaomi', created: new Date() },
+            { _id: '6', name: 'Huawei', created: new Date() },
         ];
 
         this.brandCtrl = new FormControl();
@@ -70,11 +70,11 @@ export class PriceListComponent implements OnInit {
             .map(brand => brand ? this.filterBrands(brand) : this.brands.slice());
 
         this.categories = [
-            { _id: '1', name: 'Mobile', ebay_au: 'Mobile AU', ebay_uk: 'Mobile UK' },
-            { _id: '2', name: 'Wearable', ebay_au: 'Wearable AU', ebay_uk: 'Wearable UK' },
-            { _id: '3', name: 'Laptop', ebay_au: 'Laptop AU', ebay_uk: 'Laptop UK' },
-            { _id: '4', name: 'Camera', ebay_au: 'Camera AU', ebay_uk: 'Camera UK' },
-            { _id: '5', name: 'PC', ebay_au: 'PC AU', ebay_uk: 'PC UK' }
+            { _id: '1', name: 'Mobile', ebay_au: 'Mobile AU', ebay_uk: 'Mobile UK', created: new Date() },
+            { _id: '2', name: 'Wearable', ebay_au: 'Wearable AU', ebay_uk: 'Wearable UK', created: new Date() },
+            { _id: '3', name: 'Laptop', ebay_au: 'Laptop AU', ebay_uk: 'Laptop UK', created: new Date() },
+            { _id: '4', name: 'Camera', ebay_au: 'Camera AU', ebay_uk: 'Camera UK', created: new Date() },
+            { _id: '5', name: 'PC', ebay_au: 'PC AU', ebay_uk: 'PC UK', created: new Date() }
         ];
 
         this.categoryCtrl = new FormControl();
@@ -83,13 +83,13 @@ export class PriceListComponent implements OnInit {
             .map(category => category ? this.filterCategories(category) : this.categories.slice());
 
         this.products = [
-            { _id: '1', sku: 'SKU-1', name: 'Product 1', description: 'This is product 1', category: this.categories[0], brand: this.brands[1], price: 168, last_update: new Date('2017/11/26') },
-            { _id: '2', sku: 'SKU-2', name: 'Product 2', description: 'This is product 2', category: this.categories[1], brand: this.brands[5], price: 169, last_update: new Date('2017/11/26') },
-            { _id: '3', sku: 'SKU-3', name: 'Product 3', description: 'This is product 3', category: this.categories[2], brand: this.brands[1], price: 160, last_update: new Date('2017/11/26') },
-            { _id: '4', sku: 'SKU-4', name: 'Product 4', description: 'This is product 4', category: this.categories[3], brand: this.brands[5], price: 171, last_update: new Date('2017/11/26') },
-            { _id: '5', sku: 'SKU-5', name: 'Product 5', description: 'This is product 5', category: this.categories[4], brand: this.brands[2], price: 172, last_update: new Date('2017/11/26') },
-            { _id: '6', sku: 'SKU-6', name: 'Product 6', description: 'This is product 6', category: this.categories[3], brand: this.brands[3], price: 173, last_update: new Date('2017/11/26') },
-            { _id: '7', sku: 'SKU-7', name: 'Product 7', description: 'This is product 7', category: this.categories[3], brand: this.brands[4], price: 174, last_update: new Date('2017/11/26') }
+            { _id: '1', sku: 'SKU-1', name: 'Product 1', description: 'This is product 1', category: this.categories[0], brand: this.brands[1], price: 168, created: new Date(), last_update: new Date('2017/11/26') },
+            { _id: '2', sku: 'SKU-2', name: 'Product 2', description: 'This is product 2', category: this.categories[1], brand: this.brands[5], price: 169, created: new Date(), last_update: new Date('2017/11/26') },
+            { _id: '3', sku: 'SKU-3', name: 'Product 3', description: 'This is product 3', category: this.categories[2], brand: this.brands[1], price: 160, created: new Date(), last_update: new Date('2017/11/26') },
+            { _id: '4', sku: 'SKU-4', name: 'Product 4', description: 'This is product 4', category: this.categories[3], brand: this.brands[5], price: 171, created: new Date(), last_update: new Date('2017/11/26') },
+            { _id: '5', sku: 'SKU-5', name: 'Product 5', description: 'This is product 5', category: this.categories[4], brand: this.brands[2], price: 172, created: new Date(), last_update: new Date('2017/11/26') },
+            { _id: '6', sku: 'SKU-6', name: 'Product 6', description: 'This is product 6', category: this.categories[3], brand: this.brands[3], price: 173, created: new Date(), last_update: new Date('2017/11/26') },
+            { _id: '7', sku: 'SKU-7', name: 'Product 7', description: 'This is product 7', category: this.categories[3], brand: this.brands[4], price: 174, created: new Date(), last_update: new Date('2017/11/26') }
         ];
     }
 

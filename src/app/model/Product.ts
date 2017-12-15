@@ -9,5 +9,6 @@ export interface Product {
     category: Category;
     brand: Brand;
     price: number;
+    created: Date;
     last_update: Date;
 }

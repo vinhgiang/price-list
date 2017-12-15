@@ -14,7 +14,11 @@ export class Brand extends BrandModel {
 
     static async createBrand(name: String): Promise<object> {
         const brand = new Brand({ name });
-        await brand.save();
+        try {
+            await brand.save();
+        } catch(ex) {
+            return { status: 0, error: ex.message };
+        }
         return { status: 1 };
     }
 

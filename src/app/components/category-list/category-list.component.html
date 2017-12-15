@@ -10,7 +10,9 @@
             [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [rows]='rows' [selectionType]="'single'">
 
             <ngx-datatable-column name="ID" [width]="50" prop="_id">
-                {{value}}
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex + 1">
+                    {{rowIndex}}
+                </ng-template>
             </ngx-datatable-column>
 
             <ngx-datatable-column name="Name" [width]="200">
@@ -38,6 +40,10 @@
                     </span>
                     <input autofocus (blur)="updateValue($event, 'ebay_uk', rowIndex)" *ngIf="editing[rowIndex+ '-ebay_uk']" type="text" [value]="value" />
                 </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Created" [width]="200" prop="created">
+                {{value}}
             </ngx-datatable-column>
         </ngx-datatable>
     </div>

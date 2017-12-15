@@ -1,7 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Brand } from '../../model/Brand';
-import { Http, Headers } from '@angular/http';
 import { BrandServices } from '../../services/brand.services';
 
 @Component({
@@ -23,7 +22,7 @@ export class BrandListComponent implements OnInit {
     ];
     @ViewChild(DatatableComponent) table: DatatableComponent;
 
-    constructor(private http: Http, private brandServices: BrandServices) {
+    constructor(private brandServices: BrandServices) {
         // this.brands = [
         //     { _id: '1', name: 'Apple' },
         //     { _id: '2', name: 'Samsung' },

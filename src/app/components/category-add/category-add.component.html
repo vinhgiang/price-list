@@ -1,10 +1,10 @@
 <h1 class="page-header">New category</h1>
 <div class="">
-    <form>
+    <form (ngSubmit)="onSubmit(formAddCategory.value)" #formAddCategory="ngForm" >
         <div class="form-group row">
             <div class="col-6">
                 <mat-form-field class="form-col-6">
-                    <input matInput placeholder="Name" value="">
+                    <input [(ngModel)]="txtName" name="name" matInput placeholder="Name" value="">
                 </mat-form-field>
             </div>
         </div>
@@ -12,7 +12,7 @@
         <div class="form-group row">
             <div class="col-6">
                 <mat-form-field class="form-col-6">
-                    <input matInput placeholder="eBay AU" value="">
+                    <input [(ngModel)]="txtEbayAu" name="ebay_au" matInput placeholder="eBay AU" value="">
                 </mat-form-field>
             </div>
         </div>
@@ -20,14 +20,14 @@
         <div class="form-group row">
             <div class="col-6">
                 <mat-form-field class="form-col-6">
-                    <input matInput placeholder="eBay UK" value="">
+                    <input [(ngModel)]="txtEbayUk" name="ebay_uk" matInput placeholder="eBay UK" value="">
                 </mat-form-field>
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-2">
-                <button mat-raised-button color="primary">Add</button>
+                <button type="submit" mat-raised-button color="primary">Add</button>
             </div>
         </div>
     </form>

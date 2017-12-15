@@ -33,10 +33,10 @@ export class ProductAddComponent implements OnInit {
 
     constructor(private http: Http) {
         this.suppliers = [
-            { _id: '1', name: 'Arkansas' },
-            { _id: '2', name: 'California' },
-            { _id: '3', name: 'Florida' },
-            { _id: '4', name: 'Texas' }
+            { _id: '1', name: 'Arkansas', created: new Date() },
+            { _id: '2', name: 'California', created: new Date() },
+            { _id: '3', name: 'Florida', created: new Date() },
+            { _id: '4', name: 'Texas', created: new Date() }
         ];
 
         this.suplierCtrl = new FormControl();
@@ -45,12 +45,12 @@ export class ProductAddComponent implements OnInit {
             .map(suplier => suplier ? this.filterSupliers(suplier) : this.suppliers.slice());
 
         this.brands = [
-            { _id: '1', name: 'Apple' },
-            { _id: '2', name: 'Samsung' },
-            { _id: '3', name: 'HTC' },
-            { _id: '4', name: 'Sony' },
-            { _id: '5', name: 'Xiaomi' },
-            { _id: '6', name: 'Huawei' },
+            { _id: '1', name: 'Apple', created: new Date() },
+            { _id: '2', name: 'Samsung', created: new Date() },
+            { _id: '3', name: 'HTC', created: new Date() },
+            { _id: '4', name: 'Sony', created: new Date() },
+            { _id: '5', name: 'Xiaomi', created: new Date() },
+            { _id: '6', name: 'Huawei', created: new Date() },
         ];
 
         this.brandCtrl = new FormControl();
@@ -59,11 +59,11 @@ export class ProductAddComponent implements OnInit {
             .map(brand => brand ? this.filterBrands(brand) : this.brands.slice());
 
         this.categories = [
-            { _id: '1', name: 'Mobile', ebay_au: 'Mobile AU', ebay_uk: 'Mobile UK' },
-            { _id: '2', name: 'Wearable', ebay_au: 'Wearable AU', ebay_uk: 'Wearable UK' },
-            { _id: '3', name: 'Laptop', ebay_au: 'Laptop AU', ebay_uk: 'Laptop UK' },
-            { _id: '4', name: 'Camera', ebay_au: 'Camera AU', ebay_uk: 'Camera UK' },
-            { _id: '5', name: 'PC', ebay_au: 'PC AU', ebay_uk: 'PC UK' }
+            { _id: '1', name: 'Mobile', ebay_au: 'Mobile AU', ebay_uk: 'Mobile UK', created: new Date() },
+            { _id: '2', name: 'Wearable', ebay_au: 'Wearable AU', ebay_uk: 'Wearable UK', created: new Date() },
+            { _id: '3', name: 'Laptop', ebay_au: 'Laptop AU', ebay_uk: 'Laptop UK', created: new Date() },
+            { _id: '4', name: 'Camera', ebay_au: 'Camera AU', ebay_uk: 'Camera UK', created: new Date() },
+            { _id: '5', name: 'PC', ebay_au: 'PC AU', ebay_uk: 'PC UK', created: new Date() }
         ];
 
         this.categoryCtrl = new FormControl();

@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { brandRoute } from './controllers/brand/brandRoute';
+import { categoryRoute } from './controllers/category/categoryRoute';
 
 export const app = express();
 
@@ -12,3 +13,4 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => res.send('Home page'));
 
 app.use('/brand', brandRoute);
+app.use('/category', categoryRoute);
