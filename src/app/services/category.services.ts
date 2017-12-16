@@ -24,4 +24,14 @@ export class CategoryServices {
             .then(response => response.json())
             .catch(err => console.log(err.message));
     }
+
+    updateCategory(category: Category) {
+        const url = environment.domain + '/category/edit';
+        const headers = new Headers();
+        headers.append('Content-Type', 'Application/JSON');
+        const body = category;
+        return this.http.post(url, body, { headers } ).toPromise()
+            .then(response => response.json())
+            .catch(err => console.log(err.message));
+    }
 }

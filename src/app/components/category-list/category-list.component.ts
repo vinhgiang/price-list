@@ -44,13 +44,12 @@ export class CategoryListComponent implements OnInit {
     }
 
     updateValue(event, cell, rowIndex) {
-        console.log('inline editing rowIndex', rowIndex)
-        this.editing[rowIndex + '-' + cell] = false;
         let newValue = event.target.value;
-        
-        this.categories[rowIndex][cell] = newValue;
 
+        this.editing[rowIndex + '-' + cell] = false;
+        this.categories[rowIndex][cell] = newValue;
         this.categories = [...this.categories];
-        console.log('UPDATED!', this.categories[rowIndex][cell]);
+
+        this.categoryServices.updateCategory(this.categories[rowIndex]);
     }
 }
