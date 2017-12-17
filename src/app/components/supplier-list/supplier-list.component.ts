@@ -26,7 +26,6 @@ export class SupplierListComponent implements OnInit {
     ngOnInit() {
         this.supplierServices.getSupplier()
             .then(list => {
-                console.log(list);
                 this.suppliers = list;
                 this.temp = [...this.suppliers];
                 this.rows = this.suppliers;
@@ -48,14 +47,13 @@ export class SupplierListComponent implements OnInit {
     }
 
     updateValue(event, cell, rowIndex) {
-        console.log('inline editing rowIndex', rowIndex)
-        this.editing[rowIndex + '-' + cell] = false;
         let newValue = event.target.value;
-        
-        this.suppliers[rowIndex][cell] = newValue;
 
+        this.editing[rowIndex + '-' + cell] = false;
+        this.suppliers[rowIndex][cell] = newValue;
         this.suppliers = [...this.suppliers];
-        console.log('UPDATED!', this.suppliers[rowIndex][cell]);
+
+        this.supplierServices.updateSupplier(this.suppliers[rowIndex]);
     }
 
 }

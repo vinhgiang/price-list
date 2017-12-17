@@ -35,4 +35,13 @@ export class Supplier extends supplierModel {
         }
     }
 
+    static async updateSupplier(id: string | number, data: object): Promise<object> {
+        try {
+            const updatedSupplier = await Supplier.findByIdAndUpdate(id, data, { new: true });
+            return { status: 1 };
+        } catch(ex) {
+            return { status: 0, error: ex.message };
+        }
+    }
+
 }

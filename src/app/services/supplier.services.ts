@@ -23,4 +23,13 @@ export class SupplierServices {
             .then(response => response.json())
             .catch(err => console.log(err.message));
     }
+
+    updateSupplier(supplier: Supplier) {
+        const url = environment.domain + '/supplier/edit';
+        const headers = new Headers();
+        headers.append('Content-Type', 'Application/JSON');
+        return this.http.post(url, supplier, { headers }).toPromise()
+            .then(response => response.json())
+            .catch(err => console.log(err.message));
+    }
 }
