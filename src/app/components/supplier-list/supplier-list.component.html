@@ -9,8 +9,10 @@
         <ngx-datatable #table class='material' [headerHeight]="50" 
             [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [rows]='rows' [selectionType]="'single'">
 
-            <ngx-datatable-column name="ID" prop="_id" [width]="50">
-                {{value}}
+            <ngx-datatable-column name="No" [width]="50">
+                <ng-template let-rowIndex="rowIndex + 1" let-row="row" ngx-datatable-cell-template>
+                    {{rowIndex}}
+                </ng-template>
             </ngx-datatable-column>
 
             <ngx-datatable-column name="Name" [width]="500">
@@ -20,6 +22,10 @@
                     </span>
                     <input autofocus (blur)="updateValue($event, 'name', rowIndex)" *ngIf="editing[rowIndex+ '-name']" type="text" [value]="value" />
                 </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Created" [width]="200" prop="created_string">
+                {{value}}
             </ngx-datatable-column>
         </ngx-datatable>
     </div>

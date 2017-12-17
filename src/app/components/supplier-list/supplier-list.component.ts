@@ -1,13 +1,15 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Supplier } from '../../model/Supplier';
+import { SupplierServices } from '../../services/supplier.services';
 
 @Component({
     selector: 'app-supplier-list',
     templateUrl: './supplier-list.component.html',
-    styleUrls: ['./supplier-list.component.scss']
+    styleUrls: ['./supplier-list.component.scss'],
+    providers: [SupplierServices]
 })
-export class SupplierListComponent {
+export class SupplierListComponent implements OnInit {
     suppliers: Supplier[];
     rows = [];
     temp = [];
@@ -19,19 +21,16 @@ export class SupplierListComponent {
     ];
     @ViewChild(DatatableComponent) table: DatatableComponent;
 
-    constructor() {
-        this.suppliers = [
-            { _id: '1', name: 'Tenosis', created: new Date() },
-            { _id: '2', name: 'Subic', created: new Date() },
-            { _id: '3', name: 'Fante', created: new Date() },
-            { _id: '4', name: 'Pyrolium', created: new Date() },
-            { _id: '5', name: 'Yadel', created: new Date() },
-            { _id: '6', name: 'Diare', created: new Date() },
-            { _id: '7', name: 'Audoid', created: new Date() },
-            { _id: '8', name: 'Inist', created: new Date() }
-        ];
-        this.temp = [...this.suppliers];
-        this.rows = this.suppliers;
+    constructor(private supplierServices: SupplierServices) {}
+
+    ngOnInit() {
+        this.supplierServices.getSupplier()
+            .then(list => {
+                console.log(list);
+                this.suppliers = list;
+                this.temp = [...this.suppliers];
+                this.rows = this.suppliers;
+            })
     }
 
     updateFilter(event) {

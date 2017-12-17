@@ -22,18 +22,7 @@ export class BrandListComponent implements OnInit {
     ];
     @ViewChild(DatatableComponent) table: DatatableComponent;
 
-    constructor(private brandServices: BrandServices) {
-        // this.brands = [
-        //     { _id: '1', name: 'Apple' },
-        //     { _id: '2', name: 'Samsung' },
-        //     { _id: '3', name: 'HTC' },
-        //     { _id: '4', name: 'Sony' },
-        //     { _id: '5', name: 'Xiaomi' },
-        //     { _id: '6', name: 'Huawei' },
-        // ];
-        // this.temp = [...this.brands];
-        // this.rows = this.brands;
-    }
+    constructor(private brandServices: BrandServices) {}
     
     ngOnInit() {
         this.brandServices.getBrands()
