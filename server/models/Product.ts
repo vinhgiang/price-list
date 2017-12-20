@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import * as moment from 'moment'
 import { ProductDocument } from '../documents/ProductDocument';
 
 const ProductSchema = new Schema({
@@ -16,6 +17,23 @@ const ProductSchema = new Schema({
 const ProductModel = model<ProductDocument>('Product', ProductSchema);
 
 export class Product extends ProductModel {
+
+    static async getProduct(): Promise<ProductDocument[] | object> {
+        try {
+            const products = await Product.find({})
+                .populate('supplier', 'name')
+                .populate('brand', 'name')
+                .populate('category', { name: 'name', ebay_au: 'ebay_au', ebay_uk: 'ebay_uk' } );
+            const newResult = products.map(e => {
+                var newObj = e._doc;
+                newObj.created_string = moment(e.created).format('DD-MM-YYYY HH:mm:ss');
+                return newObj;
+            });
+            return newResult;
+        } catch(ex) {
+            return ex;
+        }
+    }
 
     static async createProduct(sku: string, name: string, supplierId: string, brandId: string, categoryId: string, description: string, price: number): Promise<object> {
         const product = new Product({

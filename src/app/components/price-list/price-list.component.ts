@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Http, Headers } from '@angular/http';
-import { Response } from '@angular/http/src/static_response';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
@@ -11,18 +9,28 @@ import { Brand } from '../../model/Brand';
 import { Category } from '../../model/Category';
 import { Product } from '../../model/Product';
 
+import { BrandServices } from '../../services/brand.services';
+import { SupplierServices } from '../../services/supplier.services';
+import { CategoryServices } from '../../services/category.services';
+import { ProductServices } from '../../services/product.services';
+
+import { MatSnackBar, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material'
+import { ToastMsgComponent } from '../../shared/toast-msg/toast-msg.component';
+import { Subscription } from 'rxjs/Subscription';
+
 @Component({
     selector: 'app-price-list',
     templateUrl: './price-list.component.html',
-    styleUrls: ['./price-list.component.scss']
+    styleUrls: ['./price-list.component.scss'],
+    providers: [BrandServices, SupplierServices, CategoryServices, ProductServices]
 })
 export class PriceListComponent implements OnInit {
     suppliers: Supplier[];
     brands: Brand[];
     categories: Category[];
 
-    suplierCtrl: FormControl;
-    filteredSupliers: Observable<Supplier[]>;
+    supplierCtrl: FormControl;
+    filteredSuppliers: Observable<Supplier[]>;
 
     brandCtrl: FormControl;
     filteredBrands: Observable<Brand[]>;
@@ -30,87 +38,126 @@ export class PriceListComponent implements OnInit {
     categoryCtrl: FormControl;
     filteredCategories: Observable<Category[]>;
 
-    columns = [
-        { name: 'SKU' },
-        { name: 'Name' },
-        { name: 'Description' },
-        { name: 'Category', prop: 'category.name' },
-        { name: 'Brand', prop: 'brand.name' },
-        { name: 'Price' },
-        { name: 'Last Update', prop: 'last_update' },
-    ];
     products: Product[];
-    editing = {};
+    rows = [];
+    temp = [];
+    editing = [];
 
-    constructor(private http: Http) {
-        this.suppliers = [
-            { _id: '1', name: 'Arkansas', created: new Date() },
-            { _id: '2', name: 'California', created: new Date() },
-            { _id: '3', name: 'Florida', created: new Date() },
-            { _id: '4', name: 'Texas', created: new Date() }
-        ];
+    sku: string;
+    name: string;
+    description: string;
+    supplier: string;
+    brand: string;
+    category: string;
+    price: number;
 
-        this.suplierCtrl = new FormControl();
-        this.filteredSupliers = this.suplierCtrl.valueChanges
-            .startWith(null)
-            .map(suplier => suplier ? this.filterSupliers(suplier) : this.suppliers.slice());
+    subscription: Subscription;
 
-        this.brands = [
-            { _id: '1', name: 'Apple', created: new Date() },
-            { _id: '2', name: 'Samsung', created: new Date() },
-            { _id: '3', name: 'HTC', created: new Date() },
-            { _id: '4', name: 'Sony', created: new Date() },
-            { _id: '5', name: 'Xiaomi', created: new Date() },
-            { _id: '6', name: 'Huawei', created: new Date() },
-        ];
+    @ViewChild(MatAutocompleteTrigger) trigger: MatAutocompleteTrigger;
 
+    constructor(private brandServices: BrandServices, private supplierServices: SupplierServices, private categoryServices: CategoryServices,
+        private productServices: ProductServices, private snackBar: MatSnackBar) {
+
+        this.supplierCtrl = new FormControl();
         this.brandCtrl = new FormControl();
+        this.categoryCtrl = new FormControl();
+    }
+
+    ngAfterViewInit() {
+        this._subscribeToClosingActions();
+    }
+
+    ngOnDestroy() {
+        if (this.subscription && !this.subscription.closed) {
+            this.subscription.unsubscribe();
+        }
+    }
+
+    private _subscribeToClosingActions(): void {
+        if (this.subscription && !this.subscription.closed) {
+            this.subscription.unsubscribe();
+        }
+
+        this.subscription = this.trigger.panelClosingActions
+            .subscribe(e => {
+                if (!e || !e.source) {
+                    this.supplierCtrl.setValue(null);
+                    this.brandCtrl.setValue(null);
+                    this.categoryCtrl.setValue(null);
+                }
+            },
+            err => this._subscribeToClosingActions(),
+            () => this._subscribeToClosingActions());
+    }
+
+    async ngOnInit() {
+        this.suppliers = await this.supplierServices.getSupplier();
+        this.filteredSuppliers = this.supplierCtrl.valueChanges
+            .startWith(null)
+            .map(supplier => supplier ? this.filterSuppliers(supplier) : this.suppliers.slice());
+
+
+        this.brands = await this.brandServices.getBrands();
         this.filteredBrands = this.brandCtrl.valueChanges
             .startWith(null)
             .map(brand => brand ? this.filterBrands(brand) : this.brands.slice());
 
-        this.categories = [
-            { _id: '1', name: 'Mobile', ebay_au: 'Mobile AU', ebay_uk: 'Mobile UK', created: new Date() },
-            { _id: '2', name: 'Wearable', ebay_au: 'Wearable AU', ebay_uk: 'Wearable UK', created: new Date() },
-            { _id: '3', name: 'Laptop', ebay_au: 'Laptop AU', ebay_uk: 'Laptop UK', created: new Date() },
-            { _id: '4', name: 'Camera', ebay_au: 'Camera AU', ebay_uk: 'Camera UK', created: new Date() },
-            { _id: '5', name: 'PC', ebay_au: 'PC AU', ebay_uk: 'PC UK', created: new Date() }
-        ];
-
-        this.categoryCtrl = new FormControl();
+        this.categories = await this.categoryServices.getCategory();
         this.filteredCategories = this.categoryCtrl.valueChanges
             .startWith(null)
             .map(category => category ? this.filterCategories(category) : this.categories.slice());
 
-        this.products = [
-            { _id: '1', sku: 'SKU-1', name: 'Product 1', description: 'This is product 1', category: this.categories[0], brand: this.brands[1], price: 168, created: new Date(), last_update: new Date('2017/11/26') },
-            { _id: '2', sku: 'SKU-2', name: 'Product 2', description: 'This is product 2', category: this.categories[1], brand: this.brands[5], price: 169, created: new Date(), last_update: new Date('2017/11/26') },
-            { _id: '3', sku: 'SKU-3', name: 'Product 3', description: 'This is product 3', category: this.categories[2], brand: this.brands[1], price: 160, created: new Date(), last_update: new Date('2017/11/26') },
-            { _id: '4', sku: 'SKU-4', name: 'Product 4', description: 'This is product 4', category: this.categories[3], brand: this.brands[5], price: 171, created: new Date(), last_update: new Date('2017/11/26') },
-            { _id: '5', sku: 'SKU-5', name: 'Product 5', description: 'This is product 5', category: this.categories[4], brand: this.brands[2], price: 172, created: new Date(), last_update: new Date('2017/11/26') },
-            { _id: '6', sku: 'SKU-6', name: 'Product 6', description: 'This is product 6', category: this.categories[3], brand: this.brands[3], price: 173, created: new Date(), last_update: new Date('2017/11/26') },
-            { _id: '7', sku: 'SKU-7', name: 'Product 7', description: 'This is product 7', category: this.categories[3], brand: this.brands[4], price: 174, created: new Date(), last_update: new Date('2017/11/26') }
-        ];
+        this.productServices.getProduct()
+            .then(list => {
+                this.products = list;
+                this.temp = [...this.products];
+                this.rows = this.products;
+            })
     }
 
-    ngOnInit() {
-        // this.http.get('https://jsonplaceholder.typicode.com/photos').toPromise()
-        // .then(Response => {
-        //     return this.suppliers = Response.json()
-        // })
-        // .catch(err => console.log(err.message));
+    filterSuppliers(supplier: Supplier | string) {
+        const supplierName = typeof supplier === 'object' ? supplier.name : supplier;
+        return this.suppliers.filter(supplier => supplier.name.toLowerCase().indexOf(supplierName.toLowerCase()) === 0);
     }
 
-    filterSupliers(name: string) {
-        return this.suppliers.filter(suplier => suplier.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+    filterBrands(brand: Brand) {
+        const brandName = typeof brand === 'object' ? brand.name : brand;
+        return this.brands.filter(brand => brand.name.toLowerCase().indexOf(brandName.toLowerCase()) === 0);
     }
 
-    filterBrands(name: string) {
-        return this.brands.filter(brand => brand.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+    filterCategories(category: Category) {
+        const categoryName = typeof category === 'object' ? category.name : category;
+        return this.categories.filter(category => category.name.toLowerCase().indexOf(categoryName.toLowerCase()) === 0);
     }
 
-    filterCategories(name: string) {
-        return this.categories.filter(category => category.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+    onSubmit(formValue) {
+        
+    }
+
+    displayValue(obj: any): string {
+        return obj ? obj.name : '';
+    }
+
+    onSelectedSupplier(event: MatAutocompleteSelectedEvent): void {
+        this.supplier = event.option.value._id;
+        this.supplierCtrl.setValue(event.option.value);
+    }
+
+    onSelectedBrand(event: MatAutocompleteSelectedEvent): void {
+        this.brand = event.option.value._id;
+        this.brandCtrl.setValue(event.option.value);
+    }
+
+    onSelectedCategory(event: MatAutocompleteSelectedEvent): void {
+        this.category = event.option.value._id;
+        this.categoryCtrl.setValue(event.option.value);
+    }
+
+    toastMessage(msg: string, duration: number = 1000) {
+        this.snackBar.openFromComponent(ToastMsgComponent, {
+            duration: duration,
+            data: msg
+        });
     }
 
     updateValue(event, cell, rowIndex) {

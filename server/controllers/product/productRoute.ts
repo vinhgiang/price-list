@@ -6,6 +6,15 @@ export const productRoute = express.Router();
 
 const jsonParser = json();
 
+productRoute.get('/list', async (req, res) => {
+    try {
+        const products = await Product.getProduct();
+        res.send(products);
+    } catch(ex) {
+        res.status(500).send(ex.message);
+    }
+});
+
 productRoute.post('/add', jsonParser, async (req, res) => {
     const { sku, name, description, category, brand, supplier, price } = req.body;
     try {

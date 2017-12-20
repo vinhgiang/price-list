@@ -8,6 +8,13 @@ import { Product } from '../model/Product';
 export class ProductServices {
     constructor(private http: Http){}
 
+    getProduct() {
+        const url = environment.domain + '/product/list';
+        return this.http.get(url).toPromise()
+            .then(response => response.json())
+            .catch(err => console.log(err.message));
+    }
+
     createProduct(product: Product) {
         const url = environment.domain + '/product/add';
         const headers = new Headers();

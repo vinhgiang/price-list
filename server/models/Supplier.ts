@@ -7,7 +7,7 @@ const supplierSchema = new Schema({
     created: { type: Date, default: Date.now }
 });
 
-const supplierModel = model<SupplierDocument>('Supliers', supplierSchema);
+const supplierModel = model<SupplierDocument>('Supplier', supplierSchema);
 
 export class Supplier extends supplierModel {
 
