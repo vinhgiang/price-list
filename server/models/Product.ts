@@ -9,9 +9,10 @@ const ProductSchema = new Schema({
     category: { type: Schema.Types.ObjectId, ref: 'Category' },
     brand: { type: Schema.Types.ObjectId, ref: 'Brand' },
     supplier: { type: Schema.Types.ObjectId, ref: 'Supplier' },
+    previous_price: { type: Number, default: 0 },
     price: { type: Number, required: true },
     created: { type: Date, default: Date.now },
-    last_update: { type: Date },
+    last_update: { type: Date, default: Date.now },
 });
 
 const ProductModel = model<ProductDocument>('Product', ProductSchema);
@@ -27,6 +28,7 @@ export class Product extends ProductModel {
             const newResult = products.map(e => {
                 var newObj = e._doc;
                 newObj.created_string = moment(e.created).format('DD-MM-YYYY HH:mm:ss');
+                newObj.last_updated_string = moment(e.last_update).format('DD-MM-YYYY HH:mm:ss');
                 return newObj;
             });
             return newResult;

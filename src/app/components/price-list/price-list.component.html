@@ -61,7 +61,8 @@
                             <span title="Double click to edit" (dblclick)="editing[rowIndex + '-sku'] = true" *ngIf=" ! editing[rowIndex + '-sku']">
                                 {{value}}
                             </span>
-                            <input autofocus (blur)="updateValue($event, 'sku', rowIndex)" *ngIf="editing[rowIndex+ '-sku']" type="text" [value]="value" />
+                            <input autofocus (blur)="updateValue($event, 'sku', rowIndex)" *ngIf="editing[rowIndex+ '-sku']" type="text" [value]="value"
+                            />
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Name" [width]="200">
@@ -69,7 +70,8 @@
                             <span title="Double click to edit" (dblclick)="editing[rowIndex + '-name'] = true" *ngIf=" ! editing[rowIndex + '-name']">
                                 {{value}}
                             </span>
-                            <input autofocus (blur)="updateValue($event, 'name', rowIndex)" *ngIf="editing[rowIndex+ '-name']" type="text" [value]="value" />
+                            <input autofocus (blur)="updateValue($event, 'name', rowIndex)" *ngIf="editing[rowIndex+ '-name']" type="text" [value]="value"
+                            />
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Description" [width]="400">
@@ -77,7 +79,8 @@
                             <span title="Double click to edit" (dblclick)="editing[rowIndex + '-description'] = true" *ngIf=" ! editing[rowIndex + '-description']">
                                 {{value}}
                             </span>
-                            <input autofocus (blur)="updateValue($event, 'description', rowIndex)" *ngIf="editing[rowIndex+ '-description']" type="text" [value]="value" />
+                            <input autofocus (blur)="updateValue($event, 'description', rowIndex)" *ngIf="editing[rowIndex+ '-description']" type="text"
+                                [value]="value" />
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Category" [width]="150" prop="category">
@@ -107,10 +110,11 @@
                             <span title="Double click to edit" (dblclick)="editing[rowIndex + '-price'] = true" *ngIf=" ! editing[rowIndex + '-price']">
                                 {{value}}
                             </span>
-                            <input autofocus (blur)="updateValue($event, 'price', rowIndex)" *ngIf="editing[rowIndex+ '-price']" type="text" [value]="value" />
+                            <input autofocus (blur)="updateValue($event, 'price', rowIndex)" *ngIf="editing[rowIndex+ '-price']" type="text" [value]="value"
+                            />
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Last Update" [width]="300" prop="last_update"></ngx-datatable-column> -->
+                    <ngx-datatable-column name="Last Update" [width]="300" prop="last_updated_string"></ngx-datatable-column> -->
 
                     <ngx-datatable-footer>
                         <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount"
