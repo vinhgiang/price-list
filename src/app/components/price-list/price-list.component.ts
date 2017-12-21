@@ -84,6 +84,10 @@ export class PriceListComponent implements OnInit {
                     this.supplierCtrl.setValue(null);
                     this.brandCtrl.setValue(null);
                     this.categoryCtrl.setValue(null);
+
+                    this.supplier = '';
+                    this.brand = '';
+                    this.category = '';
                 }
             },
             err => this._subscribeToClosingActions(),
@@ -158,6 +162,49 @@ export class PriceListComponent implements OnInit {
             duration: duration,
             data: msg
         });
+    }
+
+    searchProduct() {
+        const searchBrand = this.brand;
+        const searchCategory = this.category;
+        const searchSupplier = this.supplier;
+        const searchSku = this.sku;
+
+        if ( searchBrand || searchCategory || searchSupplier || searchSku ) {
+            const temp = this.temp.filter(function (p: Product) {
+
+                let isCorrect = true;
+
+                if ( searchSupplier ) {
+                    isCorrect = isCorrect && p.supplier._id == searchSupplier;
+                }
+                if ( searchBrand ) {
+                    isCorrect = isCorrect && p.brand._id == searchBrand;
+                }
+                if ( searchCategory ) {
+                    isCorrect = isCorrect && p.category._id == searchCategory;
+                }
+                if ( searchSku ) {
+                    isCorrect = isCorrect && p.sku == searchSku;
+                }
+
+                return isCorrect;
+            });
+
+            // update the rows
+            this.rows = temp;
+        } else {
+            this.toastMessage('Please give me a condition to search.');
+        }
+    }
+
+    reset() {
+        this.rows = this.products;
+        
+        this.supplierCtrl.setValue(null);
+        this.brandCtrl.setValue(null);
+        this.categoryCtrl.setValue(null);
+        this.sku = '';
     }
 
     updateValue(event, cell, rowIndex) {
