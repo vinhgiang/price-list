@@ -23,4 +23,13 @@ export class ProductServices {
             .then(response => response.json())
             .catch(err => console.log(err.message));
     }
+
+    updateProduct(product: Product) {
+        const url = environment.domain + '/product/edit';
+        const headers = new Headers();
+        headers.append('Content-Type', 'Application/JSON');
+        return this.http.post(url, product, { headers }).toPromise()
+            .then(response => response.json())
+            .catch(err => console.log(err.message));
+    }
 }

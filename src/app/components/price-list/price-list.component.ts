@@ -207,9 +207,9 @@ export class PriceListComponent implements OnInit {
         this.sku = '';
     }
 
-    updateValue(event, cell, rowIndex) {
-        console.log('inline editing rowIndex', rowIndex)
+    async updateValue(event, cell, rowIndex) {
         this.editing[rowIndex + '-' + cell] = false;
+        let curValue = this.products[rowIndex][cell];
         let newValue = event.target.value;
         if(cell == 'category') {
             let selectedNewCategory = this.categories.filter(category => category._id == newValue)[0];
@@ -218,11 +218,15 @@ export class PriceListComponent implements OnInit {
             let selectedNewBrand = this.brands.filter(brand => brand._id == newValue)[0];
             newValue = selectedNewBrand;
         }
-        
+
         this.products[rowIndex][cell] = newValue;
 
-        this.products = [...this.products];
-        console.log('UPDATED!', this.products[rowIndex][cell]);
+        const updateStatus = await this.productServices.updateProduct(this.products[rowIndex]);
+        if( updateStatus.status != 1 ) {
+            
+            this.products[rowIndex][cell] = curValue;
+            this.toastMessage(updateStatus.error, 3000);
+        }
     }
 
     onSelect({ selected }) {

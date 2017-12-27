@@ -24,3 +24,13 @@ productRoute.post('/add', jsonParser, async (req, res) => {
         res.status(500).send(ex.message);
     }
 });
+
+productRoute.post('/edit', jsonParser, async (req, res) => {
+    const { _id, sku, name, description, category, brand, supplier, price } = req.body;
+    try {
+        const response = await Product.updateProduct(_id, { sku, name, description, category, brand, supplier, price } );
+        res.send(response);
+    } catch(ex) {
+        res.status(500).send(ex.message);
+    }
+});

@@ -54,4 +54,13 @@ export class Product extends ProductModel {
             return { status: 0, error: ex.message };
         }
     }
+
+    static async updateProduct(id: string, data: object): Promise<object> {
+        try {
+            const updatedProduct = await Product.findByIdAndUpdate(id, data, { new: true } );
+            return { status: 1 };
+        } catch(ex) {
+            return { status: 0, error: ex.message };
+        }
+    }
 }
