@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
-  domain: 'http://price-list.technese.net'
+    isProduction: true,
+    domain: 'http://price-list.technese.net'
 };
