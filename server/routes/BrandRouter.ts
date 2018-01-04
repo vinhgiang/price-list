@@ -12,18 +12,7 @@ export class BrandRoute {
 
     routes() {
         this.router.post('/add', this.brandController.add);
+        this.router.get('/list', this.brandController.select);
+        this.router.put('/edit', this.brandController.update);
     }
 }
-
-// brandRoute.get('/list', (req, res) => {
-//     Brand.getBrand()
-//         .then(brands => res.send(brands))
-//         .catch(err => res.status(500).send( { message: err.message } ));
-// })
-
-// brandRoute.post('/edit', jsonParser, (req, res) => {
-//     const { _id, name } = req.body;
-//     Brand.updateBrand(_id, { name })
-//         .then(response => res.send(response))
-//         .catch(error => res.status(500).send({ message: error.message } ));
-// });

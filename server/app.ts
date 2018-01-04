@@ -61,15 +61,13 @@ class App {
         this.brandRoute = new BrandRoute();
         this.brandRoute.routes();
 
-        // app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'));
-
-        // app.use('/brand', brandRoute);
         // app.use('/category', categoryRoute);
         // app.use('/supplier', supplierRoute);
         // app.use('/product', productRoute);
     }
 
     public routes(): void {
+        this.app.get('/', (req, res) => res.sendFile( path.join(__dirname, 'index.html' ) ) );
         this.app.use('/api/brand/', this.brandRoute.router);
     }
 
