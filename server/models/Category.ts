@@ -1,6 +1,15 @@
 import { Schema, model } from 'mongoose';
-import { CategoryDocument } from '../documents/CategoryDocument';
 import * as moment from 'moment';
+import { Document } from 'mongoose';
+import { MongoError } from 'mongodb';
+
+export interface ICategory extends Document {
+    name: string;
+    ebay_au: string;
+    ebay_uk: string;
+    created: Date;
+    [key: string]: any;
+}
 
 const categorySchema = new Schema({
     name: { type: String, required: true, trim: true },
@@ -9,36 +18,26 @@ const categorySchema = new Schema({
     created: { type: Date, default: Date.now }
 })
 
-const categoryModel = model<CategoryDocument>('Category', categorySchema);
+const CategoryModel = model<ICategory>('Category', categorySchema);
 
-export class Category extends categoryModel {
+export class Category extends CategoryModel {
 
-    static async getCategory(): Promise<CategoryDocument[] | object> {
-        try {
-            const categories = await Category.find({});
-            const newResult = categories.map(e => {
-                var newObj = e._doc;
-                newObj.created_string = moment(e.created).format('DD-MM-YYYY HH:mm:ss');
-                return newObj;
-            });
-            return newResult;
-        } catch(ex) {
-            return ex;
-        }
+    static getCategory(): Promise<ICategory[] | MongoError> {
+        return Category.find()
+            .select('-__v')
+            .then((result: ICategory[]) => result)
+            .catch((error: MongoError) => error);
     }
     
-    static async createCategory(name: string, ebay_uk: string, ebay_au: string): Promise<object> {
-        const category = new Category({ name, ebay_uk, ebay_au });
-        try {
-            await category.save();
-        } catch(ex) {
-            return { status: 0, error: ex.message };
-        }
-        return { status: 1 };
+    static createCategory(newCategory: ICategory): Promise<ICategory | MongoError> {
+        return Category.create(newCategory)
+                .then((result: ICategory) => result)
+                .catch((error: MongoError) => error);
     }
 
-    static async updateCategory(id: string | number, data: object): Promise<object> {
-        const updatedCategory = await Category.findByIdAndUpdate(id, data, { new: true } );
-        return { status: 1 };
+    static updateCategory(id: string | number, data: object): Promise<ICategory | MongoError> {
+        return Category.findByIdAndUpdate(id, data, { new: true } )
+                .then((result: ICategory) => result)
+                .catch((error: MongoError) => error);
     }
 }

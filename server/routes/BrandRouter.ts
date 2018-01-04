@@ -11,8 +11,8 @@ export class BrandRoute {
     }
 
     routes() {
-        this.router.post('/add', this.brandController.add);
         this.router.get('/list', this.brandController.select);
+        this.router.post('/add', this.brandController.add);
         this.router.put('/edit', this.brandController.update);
     }
 }

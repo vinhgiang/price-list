@@ -9,7 +9,7 @@ import { json, urlencoded } from 'body-parser';
 import { cfg } from './config/cfg';
 
 import { BrandRoute } from './routes/BrandRouter';
-// import { categoryRoute } from './controllers/category/categoryRoute';
+import { CategoryRoute } from './routes/CategoryRouter';
 // import { supplierRoute } from './controllers/supplier/supplierRoute';
 // import { productRoute } from './controllers/product/productRoute';
 
@@ -19,6 +19,7 @@ class App {
     public app: express.Application;
     public mongoDbURI: string;
     public brandRoute: BrandRoute;
+    public categoryRoute: CategoryRoute;
 
     constructor() {
         this.app = express();
@@ -60,8 +61,10 @@ class App {
 
         this.brandRoute = new BrandRoute();
         this.brandRoute.routes();
+        
+        this.categoryRoute = new CategoryRoute();
+        this.categoryRoute.routes();
 
-        // app.use('/category', categoryRoute);
         // app.use('/supplier', supplierRoute);
         // app.use('/product', productRoute);
     }
@@ -69,6 +72,7 @@ class App {
     public routes(): void {
         this.app.get('/', (req, res) => res.sendFile( path.join(__dirname, 'index.html' ) ) );
         this.app.use('/api/brand/', this.brandRoute.router);
+        this.app.use('/api/category', this.categoryRoute.router);
     }
 
     public getMongoDbURI(): string {
