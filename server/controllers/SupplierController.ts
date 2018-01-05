@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
+import { Supplier } from '../models/Supplier';
 import { MongoError } from 'mongodb';
-import { IBrand, Brand } from '../models/Brand';
 import * as moment from 'moment';
 
-export class BrandController {
+export class SupplierController {
     private static resolveErrorResponse(res: Response, msg: string, statusCode: number): Response {
         return res.status(statusCode).json({
             status: statusCode,
@@ -11,61 +11,59 @@ export class BrandController {
         });
     }
 
-    private static resolveAPIResponse(res: Response, result: IBrand | IBrand[] | MongoError = null): Response {
+    private static resolveAPIResponse(res: Response, result: Supplier | Supplier[] | MongoError = null): Response {
         if( result instanceof MongoError ) {
             return res.status(500).json({
                 status: 500,
                 mongoError: result.code,
                 msg: result.message,
-                error: result.name
+                code: result.code
             });
         }
 
         return res.status(res.statusCode).json({
             status: res.statusCode,
             result
-        });
+        })
     }
 
-    async select(req: Request, res: Response): Promise<Response>{
-        const result = await Brand.getBrand();
+    async select(req: Request, res: Response): Promise<Response> {
+        const result = await Supplier.getSupplier();
         if( ! ( result instanceof MongoError ) ) {
             const newResult = result.map(e => {
                 var newObj = e._doc;
                 newObj.created_string = moment(e.created).format('DD-MM-YYYY HH:mm:ss');
                 return newObj;
             });
-
-            return BrandController.resolveAPIResponse(res, newResult);
         }
-        return BrandController.resolveAPIResponse(res, result);
+        return SupplierController.resolveAPIResponse(res, result);
     }
 
     async add(req: Request, res: Response): Promise<Response> {
         const { name } = req.body;
 
         if ( ! name ) {
-            return BrandController.resolveErrorResponse(res, 'Brand name cannot be emptied', 400);
+            return SupplierController.resolveErrorResponse(res, 'Brand name cannot be emptied', 400);
         }
 
-        const newBrand: IBrand = new Brand();
-        newBrand.name = name;
+        const newSupplier = new Supplier();
+        newSupplier.name = name;
 
-        const result = await Brand.createBrand(newBrand);
-        return BrandController.resolveAPIResponse(res, result);
+        const result = await Supplier.createSupplier(newSupplier);
+        return SupplierController.resolveAPIResponse(res, result);
     }
 
     async update(req: Request, res: Response): Promise<Response> {
         const { _id, name } = req.body;
 
         if( ! _id ) {
-            return BrandController.resolveErrorResponse(res, 'ID cannot be emptied', 400);
+            return SupplierController.resolveErrorResponse(res, 'ID cannot be emptied', 400);
         }
         if ( ! name ) {
-            return BrandController.resolveErrorResponse(res, 'Brand name cannot be emptied', 400);
+            return SupplierController.resolveErrorResponse(res, 'Brand name cannot be emptied', 400);
         }
-        
-        const result = await Brand.updateBrand(_id, { name });
-        return BrandController.resolveAPIResponse(res, result);
+
+        const result = await Supplier.update(_id, { name });
+        return SupplierController.resolveAPIResponse(res, result);
     }
 }

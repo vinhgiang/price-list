@@ -18,7 +18,7 @@ export class CategoryController {
             return res.status(500).json({
                 status: 500,
                 mongoError: result.code,
-                message: result.message,
+                msg: result.message,
                 error: result.name
             });
         }

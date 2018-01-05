@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { CategoryController } from "../controllers/CategoryController";
 
-export class CategoryRoute {
+export class CategoryRouter {
     router: Router;
     categoryController: CategoryController
 

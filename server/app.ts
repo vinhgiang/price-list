@@ -8,9 +8,9 @@ import { json, urlencoded } from 'body-parser';
 
 import { cfg } from './config/cfg';
 
-import { BrandRoute } from './routes/BrandRouter';
-import { CategoryRoute } from './routes/CategoryRouter';
-// import { supplierRoute } from './controllers/supplier/supplierRoute';
+import { BrandRouter } from './routes/BrandRouter';
+import { CategoryRouter } from './routes/CategoryRouter';
+import { SupplierRouter } from './routes/SupplierRouter';
 // import { productRoute } from './controllers/product/productRoute';
 
 import './db';
@@ -18,8 +18,9 @@ import './db';
 class App {
     public app: express.Application;
     public mongoDbURI: string;
-    public brandRoute: BrandRoute;
-    public categoryRoute: CategoryRoute;
+    public brandRouter: BrandRouter;
+    public categoryRouter: CategoryRouter;
+    public supplierRouter: SupplierRouter;
 
     constructor() {
         this.app = express();
@@ -59,11 +60,14 @@ class App {
             });
         }
 
-        this.brandRoute = new BrandRoute();
-        this.brandRoute.routes();
+        this.brandRouter = new BrandRouter();
+        this.brandRouter.routes();
         
-        this.categoryRoute = new CategoryRoute();
-        this.categoryRoute.routes();
+        this.categoryRouter = new CategoryRouter();
+        this.categoryRouter.routes();
+
+        this.supplierRouter = new SupplierRouter();
+        this.supplierRouter.routes();
 
         // app.use('/supplier', supplierRoute);
         // app.use('/product', productRoute);
@@ -71,8 +75,9 @@ class App {
 
     public routes(): void {
         this.app.get('/', (req, res) => res.sendFile( path.join(__dirname, 'index.html' ) ) );
-        this.app.use('/api/brand/', this.brandRoute.router);
-        this.app.use('/api/category', this.categoryRoute.router);
+        this.app.use('/api/brand/', this.brandRouter.router);
+        this.app.use('/api/category', this.categoryRouter.router);
+        this.app.use('/api/supplier', this.supplierRouter.router);
     }
 
     public getMongoDbURI(): string {

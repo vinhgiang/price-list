@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { BrandController } from '../controllers/BrandController';
 
-export class BrandRoute {
+export class BrandRouter {
     router: Router;
     brandController: BrandController;
 

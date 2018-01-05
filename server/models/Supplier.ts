@@ -1,47 +1,41 @@
-import { Schema, model } from 'mongoose';
-import { SupplierDocument } from '../documents/SupplierDocument';
+import { Schema, model, Document } from 'mongoose';
 import * as moment from 'moment';
+import * as mongoose from 'mongoose'
+import { MongoError } from 'mongodb';
+
+export interface ISupplier extends Document {
+    name: string;
+    created: Date;
+    [key: string] : any;
+}
 
 const supplierSchema = new Schema({
     name: { type: String, required: true, trim: true },
     created: { type: Date, default: Date.now }
 });
 
-const supplierModel = model<SupplierDocument>('Supplier', supplierSchema);
+const SupplierModel = model<ISupplier>('Supplier', supplierSchema);
 
-export class Supplier extends supplierModel {
+export class Supplier extends SupplierModel {
 
-    static async getSupplier(): Promise<SupplierDocument[] | object> {
-        try {
-            const suppliers = await Supplier.find({});
-            const newResult = suppliers.map(e => {
-                var newObj = e._doc;
-                newObj.created_string = moment(e.created).format('DD-MM-YYYY HH:mm:ss');
-                return newObj;
-            });
-            return newResult;
-        } catch(ex) {
-            return ex;
-        }
+    static getSupplier(): Promise<ISupplier[] | MongoError> {
+
+        return Supplier.find()
+                .select('-__v')
+                .then((result: ISupplier[]) => result)
+                .catch((error: MongoError) => error);
     }
 
-    static async createSupplier(name: string): Promise<object> {
-        try {
-            const supplier = new Supplier({ name });
-            await supplier.save();
-            return { status: 1 };
-        } catch(ex) {
-            return { status: 0, error: ex.message };
-        }
+    static createSupplier(newSupplier: Supplier): Promise<ISupplier | MongoError> {
+        return Supplier.create(newSupplier)
+                .then((result: ISupplier) => result)
+                .catch((error: MongoError) => error);
     }
 
-    static async updateSupplier(id: string | number, data: object): Promise<object> {
-        try {
-            const updatedSupplier = await Supplier.findByIdAndUpdate(id, data, { new: true });
-            return { status: 1 };
-        } catch(ex) {
-            return { status: 0, error: ex.message };
-        }
+    static updateSupplier(id: string | number, data: object): Promise<ISupplier | MongoError> {
+        return Supplier.findByIdAndUpdate(id, data, { new: true } )
+                .then((result: ISupplier) => result)
+                .catch((error: MongoError) => error);
     }
 
 }
