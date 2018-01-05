@@ -30,7 +30,7 @@ export class SupplierController {
     async select(req: Request, res: Response): Promise<Response> {
         const result = await Supplier.getSupplier();
         if( ! ( result instanceof MongoError ) ) {
-            const newResult = result.map(e => {
+            result.map(e => {
                 var newObj = e._doc;
                 newObj.created_string = moment(e.created).format('DD-MM-YYYY HH:mm:ss');
                 return newObj;
@@ -63,7 +63,7 @@ export class SupplierController {
             return SupplierController.resolveErrorResponse(res, 'Brand name cannot be emptied', 400);
         }
 
-        const result = await Supplier.update(_id, { name });
+        const result = await Supplier.updateSupplier(_id, { name });
         return SupplierController.resolveAPIResponse(res, result);
     }
 }

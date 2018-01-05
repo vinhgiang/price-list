@@ -32,13 +32,11 @@ export class CategoryController {
     async select(req: Request, res: Response): Promise<Response> {
         const result = await Category.getCategory();
         if( ! ( result instanceof MongoError ) ) {
-            const newResult = result.map(e => {
+            result.map(e => {
                 var newObj = e._doc;
                 newObj.created_string = moment(e.created).format('DD-MM-YYYY HH:mm:ss');
                 return newObj;
             });
-
-            return CategoryController.resolveAPIResponse(res, newResult);
         }
         return CategoryController.resolveAPIResponse(res, result);
     }

@@ -30,13 +30,11 @@ export class BrandController {
     async select(req: Request, res: Response): Promise<Response>{
         const result = await Brand.getBrand();
         if( ! ( result instanceof MongoError ) ) {
-            const newResult = result.map(e => {
+            result.map(e => {
                 var newObj = e._doc;
                 newObj.created_string = moment(e.created).format('DD-MM-YYYY HH:mm:ss');
                 return newObj;
             });
-
-            return BrandController.resolveAPIResponse(res, newResult);
         }
         return BrandController.resolveAPIResponse(res, result);
     }

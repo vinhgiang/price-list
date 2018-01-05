@@ -1,6 +1,22 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import * as moment from 'moment'
-import { ProductDocument } from '../documents/ProductDocument';
+import { MongoError } from 'mongodb';
+import { ICategory } from './Category';
+import { IBrand } from './Brand';
+import { ISupplier } from './Supplier';
+
+export interface IProduct extends Document {
+    sku: string;
+    name: string;
+    description: string;
+    category: ICategory;
+    brand: IBrand;
+    supplier: ISupplier;
+    price: number;
+    created: Date;
+    last_update: Date;
+    [key: string] : any;
+}
 
 const ProductSchema = new Schema({
     sku: { type: String, required: true, trim: true, index: true, unique: true },
@@ -15,52 +31,29 @@ const ProductSchema = new Schema({
     last_update: { type: Date, default: Date.now },
 });
 
-const ProductModel = model<ProductDocument>('Product', ProductSchema);
+const ProductModel = model<IProduct>('Product', ProductSchema);
 
 export class Product extends ProductModel {
 
-    static async getProduct(): Promise<ProductDocument[] | object> {
-        try {
-            const products = await Product.find({})
+    static getProduct(): Promise<IProduct[] | MongoError> {
+        return Product.find({})
                 .populate('supplier', 'name')
                 .populate('brand', 'name')
-                .populate('category', { name: 'name', ebay_au: 'ebay_au', ebay_uk: 'ebay_uk' } );
-            const newResult = products.map(e => {
-                var newObj = e._doc;
-                newObj.created_string = moment(e.created).format('DD-MM-YYYY HH:mm:ss');
-                newObj.last_updated_string = moment(e.last_update).format('DD-MM-YYYY HH:mm:ss');
-                return newObj;
-            });
-            return newResult;
-        } catch(ex) {
-            return ex;
-        }
+                .populate('category', { name: 'name', ebay_au: 'ebay_au', ebay_uk: 'ebay_uk' } )
+                .select('-__v')
+                .then((result: IProduct[]) => result)
+                .catch((error: MongoError) => error);
     }
 
-    static async createProduct(sku: string, name: string, supplierId: string, brandId: string, categoryId: string, description: string, price: number): Promise<object> {
-        const product = new Product({
-            sku,
-            name,
-            description,
-            category: categoryId,
-            brand: brandId,
-            price: price,
-            supplier: supplierId
-        })
-        try {
-            await product.save();
-            return { status: 1 };
-        } catch(ex) {
-            return { status: 0, error: ex.message };
-        }
+    static createProduct(newProduct: IProduct): Promise<IProduct | MongoError> {
+        return Product.create(newProduct)
+                .then((result: IProduct) => result)
+                .catch((error: MongoError) => error);
     }
 
-    static async updateProduct(id: string, data: object): Promise<object> {
-        try {
-            const updatedProduct = await Product.findByIdAndUpdate(id, data, { new: true } );
-            return { status: 1 };
-        } catch(ex) {
-            return { status: 0, error: ex.message };
-        }
+    static updateProduct(id: string, data: object): Promise<IProduct | MongoError> {
+        return Product.findByIdAndUpdate(id, data, { new: true })
+                .then((result: IProduct) => result)
+                .catch((error: MongoError) => error);
     }
 }

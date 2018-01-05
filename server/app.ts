@@ -11,7 +11,7 @@ import { cfg } from './config/cfg';
 import { BrandRouter } from './routes/BrandRouter';
 import { CategoryRouter } from './routes/CategoryRouter';
 import { SupplierRouter } from './routes/SupplierRouter';
-// import { productRoute } from './controllers/product/productRoute';
+import { ProductRouter } from './routes/ProductRouter';
 
 import './db';
 
@@ -21,6 +21,7 @@ class App {
     public brandRouter: BrandRouter;
     public categoryRouter: CategoryRouter;
     public supplierRouter: SupplierRouter;
+    public productRouter: ProductRouter;
 
     constructor() {
         this.app = express();
@@ -69,8 +70,8 @@ class App {
         this.supplierRouter = new SupplierRouter();
         this.supplierRouter.routes();
 
-        // app.use('/supplier', supplierRoute);
-        // app.use('/product', productRoute);
+        this.productRouter = new ProductRouter();
+        this.productRouter.routes();
     }
 
     public routes(): void {
@@ -78,6 +79,7 @@ class App {
         this.app.use('/api/brand/', this.brandRouter.router);
         this.app.use('/api/category', this.categoryRouter.router);
         this.app.use('/api/supplier', this.supplierRouter.router);
+        this.app.use('/api/product', this.productRouter.router);
     }
 
     public getMongoDbURI(): string {
