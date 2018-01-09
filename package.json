@@ -9,7 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "start-server": "isLocal=true nodemon server/dist/server/index -e js"
+    "start-server": "isLocal=true nodemon server/dist/server/index -e js",
+    "build-prod": "ng build --prod"
   },
   "private": true,
   "dependencies": {

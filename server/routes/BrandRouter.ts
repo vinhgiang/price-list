@@ -13,6 +13,6 @@ export class BrandRouter {
     routes() {
         this.router.get('/list', this.brandController.select);
         this.router.post('/add', this.brandController.add);
-        this.router.put('/edit', this.brandController.update);
+        this.router.post('/edit', this.brandController.update);
     }
 }

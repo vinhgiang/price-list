@@ -1,38 +1,40 @@
 import { Injectable } from '@angular/core';
 import { Http, HttpModule, Headers } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
 import { environment } from '../../environments/environment';
-import { Brand } from '../model/Brand';
+import { IBrand } from '../model/Brand';
 
 @Injectable()
 
 export class BrandServices {
-    constructor(private http: Http) {}
+    modelUrl: string;
+    headers: Headers;
+
+    constructor(private http: Http) {
+        this.modelUrl = environment.domain + '/brand';
+        this.headers = new Headers();
+        this.headers.append('Content-Type', 'Application/JSON');
+    }
 
     getBrands() {
-        const url = environment.domain + '/brand/list';
+        const url = this.modelUrl + '/list';
         return this.http.get(url).toPromise()
-            .then(response => response.json() )
+            .then(response => response.json())
             .catch(err => console.log(err.message));
     }
 
-    createBrand(brand: Brand) {
-        const url = environment.domain + '/brand/add';
-        const headers = new Headers();
-        headers.append('Content-Type', 'Application/JSON');
+    createBrand(brand: IBrand) {
+        const url = this.modelUrl + '/add';
         const body = brand;
-        return this.http.post(url, body, { headers } ).toPromise()
+        return this.http.post(url, body, { headers: this.headers } ).toPromise()
             .then(response => response.json())
             .catch(err => console.log(err.message) );
     }
 
-    updateBrand(brand: Brand) {
-        const url = environment.domain + '/brand/edit';
-        const headers = new Headers();
-        headers.append('Content-Type', 'Application/JSON');
+    updateBrand(brand: IBrand) {
+        const url = this.modelUrl + '/edit';
         const body = brand;
-        return this.http.post(url, body, { headers } ).toPromise()
-            .then()
+        return this.http.post(url, body, { headers: this.headers } ).toPromise()
+            .then(response => response.json())
             .catch(err => console.log(err.message));
     }
 }

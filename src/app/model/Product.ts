@@ -1,5 +1,5 @@
 import { Category } from "./Category";
-import { Brand } from "./Brand";
+import { IBrand } from "./Brand";
 import { Supplier } from "./Supplier";
 
 export interface Product {
@@ -9,7 +9,7 @@ export interface Product {
     description: string;
     supplier: Supplier;
     category: Category;
-    brand: Brand;
+    brand: IBrand;
     price: number;
     created: Date;
     last_update: Date;

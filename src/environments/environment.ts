@@ -5,5 +5,5 @@
 
 export const environment = {
   isProduction: false,
-  domain: 'http://localhost:3000'
+  domain: 'http://localhost:3000/api'
 };

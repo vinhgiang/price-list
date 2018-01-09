@@ -6,7 +6,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
 import { Supplier } from '../../model/Supplier';
-import { Brand } from '../../model/Brand';
+import { IBrand } from '../../model/Brand';
 import { Category } from '../../model/Category';
 import { Product } from '../../model/Product';
 
@@ -31,14 +31,14 @@ import { ToastMsgComponent } from '../../shared/toast-msg/toast-msg.component';
 export class ProductAddComponent implements OnInit {
 
     suppliers: Supplier[];
-    brands: Brand[];
+    brands: IBrand[];
     categories: Category[];
 
     supplierCtrl: FormControl;
     filteredSuppliers: Observable<Supplier[]>;
 
     brandCtrl: FormControl;
-    filteredBrands: Observable<Brand[]>;
+    filteredBrands: Observable<IBrand[]>;
 
     categoryCtrl: FormControl;
     filteredCategories: Observable<Category[]>;
@@ -111,7 +111,7 @@ export class ProductAddComponent implements OnInit {
         return this.suppliers.filter(supplier => supplier.name.toLowerCase().indexOf(supplierName.toLowerCase()) === 0);
     }
 
-    filterBrands(brand: Brand) {
+    filterBrands(brand: IBrand) {
         const brandName = typeof brand === 'object' ? brand.name : brand;
         return this.brands.filter(brand => brand.name.toLowerCase().indexOf(brandName.toLowerCase()) === 0);
     }

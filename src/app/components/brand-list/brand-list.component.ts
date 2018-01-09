@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { Brand } from '../../model/Brand';
+import { IBrand } from '../../model/Brand';
 import { BrandServices } from '../../services/brand.services';
 
 @Component({
@@ -11,7 +11,7 @@ import { BrandServices } from '../../services/brand.services';
 })
 export class BrandListComponent implements OnInit {
 
-    brands: Brand[];
+    brands: IBrand[];
     rows = [];
     temp = [];
     editing = [];
@@ -26,8 +26,8 @@ export class BrandListComponent implements OnInit {
     
     ngOnInit() {
         this.brandServices.getBrands()
-            .then(list => {
-                this.brands = list;
+            .then(res => {
+                this.brands = res.result;
                 this.temp = [...this.brands];
                 this.rows = this.brands;
             })

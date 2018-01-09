@@ -55,8 +55,8 @@ export class BrandController {
 
     async update(req: Request, res: Response): Promise<Response> {
         const { _id, name } = req.body;
-
-        if( ! _id ) {
+        
+        if ( ! _id ) {
             return BrandController.resolveErrorResponse(res, 'ID cannot be emptied', 400);
         }
         if ( ! name ) {
