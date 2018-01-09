@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, HttpModule, Headers } from '@angular/http';
+import { Response, Http, HttpModule, Headers } from '@angular/http';
 import { environment } from '../../environments/environment';
 import { IBrand } from '../model/Brand';
 
@@ -18,16 +18,14 @@ export class BrandServices {
     getBrands() {
         const url = this.modelUrl + '/list';
         return this.http.get(url).toPromise()
-            .then(response => response.json())
-            .catch(err => console.log(err.message));
+            .then(response => response.json());
     }
 
     createBrand(brand: IBrand) {
         const url = this.modelUrl + '/add';
         const body = brand;
         return this.http.post(url, body, { headers: this.headers } ).toPromise()
-            .then(response => response.json())
-            .catch(err => console.log(err.message) );
+            .then(response => response.json());
     }
 
     updateBrand(brand: IBrand) {
@@ -35,6 +33,5 @@ export class BrandServices {
         const body = brand;
         return this.http.post(url, body, { headers: this.headers } ).toPromise()
             .then(response => response.json())
-            .catch(err => console.log(err.message));
     }
 }

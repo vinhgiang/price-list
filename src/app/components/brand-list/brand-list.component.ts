@@ -2,12 +2,13 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { IBrand } from '../../model/Brand';
 import { BrandServices } from '../../services/brand.services';
+import { CommonServices } from '../../services/common.services';
 
 @Component({
     selector: 'app-brand-list',
     templateUrl: './brand-list.component.html',
     styleUrls: ['./brand-list.component.scss'],
-    providers: [BrandServices]
+    providers: [BrandServices, CommonServices]
 })
 export class BrandListComponent implements OnInit {
 
@@ -22,7 +23,7 @@ export class BrandListComponent implements OnInit {
     ];
     @ViewChild(DatatableComponent) table: DatatableComponent;
 
-    constructor(private brandServices: BrandServices) {}
+    constructor(private brandServices: BrandServices, private commonService: CommonServices) {}
     
     ngOnInit() {
         this.brandServices.getBrands()
@@ -31,6 +32,9 @@ export class BrandListComponent implements OnInit {
                 this.temp = [...this.brands];
                 this.rows = this.brands;
             })
+            .catch(error => {
+                this.commonService.toastMessage(error.json().msg);
+            });
     }
 
     updateFilter(event) {
@@ -49,12 +53,18 @@ export class BrandListComponent implements OnInit {
 
     updateValue(event, cell, rowIndex) {
         let newValue = event.target.value;
+        let oldValue = this.brands[rowIndex][cell];
 
         this.editing[rowIndex + '-' + cell] = false;
+        
         this.brands[rowIndex][cell] = newValue;
         this.brands = [...this.brands];
 
-        this.brandServices.updateBrand(this.brands[rowIndex]);
+        this.brandServices.updateBrand(this.brands[rowIndex])
+            .catch(error => {
+                this.commonService.toastMessage(error.json().msg, 2000)
+                this.brands[rowIndex][cell] = oldValue;
+            });
     }
 
 }
