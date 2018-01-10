@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { Supplier } from '../models/Supplier';
 import { MongoError } from 'mongodb';
-import * as moment from 'moment';
 
 export class SupplierController {
     private static resolveErrorResponse(res: Response, msg: string, statusCode: number): Response {
@@ -29,13 +28,6 @@ export class SupplierController {
 
     async select(req: Request, res: Response): Promise<Response> {
         const result = await Supplier.getSupplier();
-        if( ! ( result instanceof MongoError ) ) {
-            result.map(e => {
-                var newObj = e._doc;
-                newObj.created_string = moment(e.created).format('DD-MM-YYYY HH:mm:ss');
-                return newObj;
-            });
-        }
         return SupplierController.resolveAPIResponse(res, result);
     }
 

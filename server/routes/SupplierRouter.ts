@@ -13,6 +13,6 @@ export class SupplierRouter {
     routes() {
         this.router.get('/list', this.supplierController.select);
         this.router.post('/add', this.supplierController.add);
-        this.router.put('/edit', this.supplierController.add);
+        this.router.post('/edit', this.supplierController.update);
     }
 }

@@ -7,7 +7,7 @@ import { CommonServices } from '../../services/common.services';
     selector: 'app-category-add',
     templateUrl: './category-add.component.html',
     styleUrls: ['./category-add.component.scss'],
-    providers: [CategoryServices]
+    providers: [CategoryServices, CommonServices]
 })
 export class CategoryAddComponent implements OnInit {
 

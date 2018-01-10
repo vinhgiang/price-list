@@ -6,30 +6,30 @@ import { Supplier } from '../model/Supplier'
 @Injectable()
 
 export class SupplierServices {
-    constructor(private http: Http) {}
+    modelUrl: string;
+    headers: Headers;
+
+    constructor(private http: Http) {
+        this.modelUrl = environment.domain + '/supplier';
+        this.headers = new Headers();
+        this.headers.append('Content-Type', 'Application/JSON');
+    }
 
     getSupplier() {
-        const url = environment.domain + '/supplier/list';
+        const url = this.modelUrl + '/list';
         return this.http.get(url).toPromise()
-            .then(response => response.json())
-            .catch(err => console.log(err.message));
+            .then(response => response.json());
     }
 
     createSupplier(supplier: Supplier) {
-        const url = environment.domain + '/supplier/add';
-        const headers = new Headers();
-        headers.append('Content-Type', 'Application/JSON');
-        return this.http.post(url, supplier, { headers }).toPromise()
-            .then(response => response.json())
-            .catch(err => console.log(err.message));
+        const url = this.modelUrl + '/add';
+        return this.http.post(url, supplier, { headers: this.headers }).toPromise()
+            .then(response => response.json());
     }
 
     updateSupplier(supplier: Supplier) {
-        const url = environment.domain + '/supplier/edit';
-        const headers = new Headers();
-        headers.append('Content-Type', 'Application/JSON');
-        return this.http.post(url, supplier, { headers }).toPromise()
-            .then(response => response.json())
-            .catch(err => console.log(err.message));
+        const url = this.modelUrl + '/edit';
+        return this.http.post(url, supplier, { headers: this.headers }).toPromise()
+            .then(response => response.json());
     }
 }

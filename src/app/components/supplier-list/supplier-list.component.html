@@ -24,8 +24,10 @@
                 </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="Created" [width]="200" prop="created_string">
-                {{value}}
+            <ngx-datatable-column name="Created" [width]="200" prop="created">
+                <ng-template ngx-datatable-cell-template let-value="value">
+                    {{value | date : 'dd/MM/yyyy HH:mm:ss'}}
+                </ng-template>
             </ngx-datatable-column>
         </ngx-datatable>
     </div>

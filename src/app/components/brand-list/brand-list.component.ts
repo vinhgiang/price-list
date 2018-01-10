@@ -23,7 +23,7 @@ export class BrandListComponent implements OnInit {
     ];
     @ViewChild(DatatableComponent) table: DatatableComponent;
 
-    constructor(private brandServices: BrandServices, private commonService: CommonServices) {}
+    constructor(private brandServices: BrandServices, private commonServices: CommonServices) {}
     
     ngOnInit() {
         this.brandServices.getBrands()
@@ -33,7 +33,7 @@ export class BrandListComponent implements OnInit {
                 this.rows = this.brands;
             })
             .catch(error => {
-                this.commonService.toastMessage(error.json().msg);
+                this.commonServices.toastMessage(error.json().msg);
             });
     }
 
@@ -61,7 +61,7 @@ export class BrandListComponent implements OnInit {
 
         this.brandServices.updateBrand(this.brands[rowIndex])
             .catch(error => {
-                this.commonService.toastMessage(error.json().msg, 2000)
+                this.commonServices.toastMessage(error.json().msg, 2000)
                 this.brands[rowIndex][cell] = oldValue;
             });
 

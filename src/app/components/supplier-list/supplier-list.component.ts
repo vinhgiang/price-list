@@ -2,12 +2,13 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Supplier } from '../../model/Supplier';
 import { SupplierServices } from '../../services/supplier.services';
+import { CommonServices } from '../../services/common.services';
 
 @Component({
     selector: 'app-supplier-list',
     templateUrl: './supplier-list.component.html',
     styleUrls: ['./supplier-list.component.scss'],
-    providers: [SupplierServices]
+    providers: [SupplierServices, CommonServices]
 })
 export class SupplierListComponent implements OnInit {
     suppliers: Supplier[];
@@ -21,15 +22,18 @@ export class SupplierListComponent implements OnInit {
     ];
     @ViewChild(DatatableComponent) table: DatatableComponent;
 
-    constructor(private supplierServices: SupplierServices) {}
+    constructor(private supplierServices: SupplierServices, private commonServices: CommonServices) {}
 
     ngOnInit() {
         this.supplierServices.getSupplier()
-            .then(list => {
-                this.suppliers = list;
+            .then(res => {
+                this.suppliers = res.result;
                 this.temp = [...this.suppliers];
                 this.rows = this.suppliers;
             })
+            .catch(error => {
+                this.commonServices.toastMessage(error.json().msg);
+            });
     }
 
     updateFilter(event) {
@@ -48,12 +52,18 @@ export class SupplierListComponent implements OnInit {
 
     updateValue(event, cell, rowIndex) {
         let newValue = event.target.value;
+        let oldValue = this.suppliers[rowIndex][cell];
 
         this.editing[rowIndex + '-' + cell] = false;
         this.suppliers[rowIndex][cell] = newValue;
-        this.suppliers = [...this.suppliers];
 
-        this.supplierServices.updateSupplier(this.suppliers[rowIndex]);
+        this.supplierServices.updateSupplier(this.suppliers[rowIndex])
+            .catch(error => {
+                this.commonServices.toastMessage(error.json().msg, 2000)
+                this.suppliers[rowIndex][cell] = oldValue;
+            });
+
+        this.suppliers = [...this.suppliers];
     }
 
 }

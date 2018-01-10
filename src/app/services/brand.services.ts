@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Response, Http, HttpModule, Headers } from '@angular/http';
+import { Http, HttpModule, Headers } from '@angular/http';
 import { environment } from '../../environments/environment';
 import { IBrand } from '../model/Brand';
 
@@ -23,15 +23,13 @@ export class BrandServices {
 
     createBrand(brand: IBrand) {
         const url = this.modelUrl + '/add';
-        const body = brand;
-        return this.http.post(url, body, { headers: this.headers } ).toPromise()
+        return this.http.post(url, brand, { headers: this.headers } ).toPromise()
             .then(response => response.json());
     }
 
     updateBrand(brand: IBrand) {
         const url = this.modelUrl + '/edit';
-        const body = brand;
-        return this.http.post(url, body, { headers: this.headers } ).toPromise()
+        return this.http.post(url, brand, { headers: this.headers } ).toPromise()
             .then(response => response.json())
     }
 }

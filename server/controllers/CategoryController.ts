@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { json } from 'body-parser';
 import { ICategory, Category } from '../models/Category';
 import { MongoError } from 'mongodb';
-import * as moment from 'moment';
 
 export class CategoryController {
     private static resolveErrorResponse(res: Response, msg: string, statusCode: number): Response {

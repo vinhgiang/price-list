@@ -9,7 +9,6 @@ export class FourOFourComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
 }
