@@ -6,32 +6,32 @@ import { Category } from '../model/Category';
 @Injectable()
 
 export class CategoryServices {
-    constructor(private http: Http) {}
+    modelUrl: string;
+    headers: Headers;
+
+    constructor(private http: Http) {
+        this.modelUrl = environment.domain + '/category';
+        this.headers = new Headers();
+        this.headers.append('Content-Type', 'Application/JSON');
+    }
 
     getCategory() {
-        const url = environment.domain + '/category/list';
+        const url = this.modelUrl + '/list';
         return this.http.get(url).toPromise()
-            .then(result => result.json())
-            .catch(err => console.log(err));
+            .then(result => result.json());
     }
 
     createCategory(category: Category) {
-        const url = environment.domain + '/category/add';
-        const headers = new Headers();
-        headers.append('Content-Type', 'Application/JSON');
+        const url = this.modelUrl + '/add';
         const body = category;
-        return this.http.post(url, body, { headers } ).toPromise()
-            .then(response => response.json())
-            .catch(err => console.log(err.message));
+        return this.http.post(url, body, { headers: this.headers } ).toPromise()
+            .then(response => response.json());
     }
 
     updateCategory(category: Category) {
-        const url = environment.domain + '/category/edit';
-        const headers = new Headers();
-        headers.append('Content-Type', 'Application/JSON');
+        const url = this.modelUrl + '/edit';
         const body = category;
-        return this.http.post(url, body, { headers } ).toPromise()
-            .then(response => response.json())
-            .catch(err => console.log(err.message));
+        return this.http.post(url, body, { headers: this.headers } ).toPromise()
+            .then(response => response.json());
     }
 }

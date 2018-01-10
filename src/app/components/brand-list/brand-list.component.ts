@@ -58,13 +58,14 @@ export class BrandListComponent implements OnInit {
         this.editing[rowIndex + '-' + cell] = false;
         
         this.brands[rowIndex][cell] = newValue;
-        this.brands = [...this.brands];
 
         this.brandServices.updateBrand(this.brands[rowIndex])
             .catch(error => {
                 this.commonService.toastMessage(error.json().msg, 2000)
                 this.brands[rowIndex][cell] = oldValue;
             });
+
+        this.brands = [...this.brands];
     }
 
 }

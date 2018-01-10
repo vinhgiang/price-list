@@ -13,6 +13,6 @@ export class CategoryRouter {
     routes() {
         this.router.get('/list', this.categoryController.select);
         this.router.post('/add', this.categoryController.add);
-        this.router.put('/edit', this.categoryController.update);
+        this.router.post('/edit', this.categoryController.update);
     }
 }

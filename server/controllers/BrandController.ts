@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { MongoError } from 'mongodb';
 import { IBrand, Brand } from '../models/Brand';
-import * as moment from 'moment';
 
 export class BrandController {
     private static resolveErrorResponse(res: Response, msg: string, statusCode: number): Response {
@@ -29,13 +28,6 @@ export class BrandController {
 
     async select(req: Request, res: Response): Promise<Response>{
         const result = await Brand.getBrand();
-        if( ! ( result instanceof MongoError ) ) {
-            result.map(e => {
-                var newObj = e._doc;
-                newObj.created_string = moment(e.created).format('DD-MM-YYYY HH:mm:ss');
-                return newObj;
-            });
-        }
         return BrandController.resolveAPIResponse(res, result);
     }
 

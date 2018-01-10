@@ -2,12 +2,13 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Category } from '../../model/Category';
 import { CategoryServices } from '../../services/category.services';
+import { CommonServices } from '../../services/common.services';
 
 @Component({
     selector: 'app-category-list',
     templateUrl: './category-list.component.html',
     styleUrls: ['./category-list.component.scss'],
-    providers: [CategoryServices]
+    providers: [CategoryServices, CommonServices]
 })
 export class CategoryListComponent implements OnInit {
     categories: Category[];
@@ -17,15 +18,17 @@ export class CategoryListComponent implements OnInit {
 
     @ViewChild(DatatableComponent) table: DatatableComponent;
 
-    constructor(private categoryServices: CategoryServices) {
-    }
+    constructor(private categoryServices: CategoryServices, private commonServices: CommonServices) {}
 
     ngOnInit() {
         this.categoryServices.getCategory()
-            .then(result => {
-                this.categories = result;
+            .then(res => {
+                this.categories = res.result;
                 this.temp = [...this.categories];
                 this.rows = this.categories;
+            })
+            .catch(error => {
+                this.commonServices.toastMessage(error.json().msg);
             });
     }
 
@@ -45,11 +48,17 @@ export class CategoryListComponent implements OnInit {
 
     updateValue(event, cell, rowIndex) {
         let newValue = event.target.value;
+        let oldValue = this.categories[rowIndex][cell];
 
         this.editing[rowIndex + '-' + cell] = false;
         this.categories[rowIndex][cell] = newValue;
-        this.categories = [...this.categories];
 
-        this.categoryServices.updateCategory(this.categories[rowIndex]);
+        this.categoryServices.updateCategory(this.categories[rowIndex])
+            .catch(error => {
+                this.commonServices.toastMessage(error.json().msg, 2000)
+                this.categories[rowIndex][cell] = oldValue;
+            });
+
+        this.categories = [...this.categories];
     }
 }
