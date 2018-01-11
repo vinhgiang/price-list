@@ -25,6 +25,7 @@ export class Category extends CategoryModel {
     static getCategory(): Promise<ICategory[] | MongoError> {
         return Category.find()
             .select('-__v')
+            .sort({'created': -1})
             .then((result: ICategory[]) => result)
             .catch((error: MongoError) => error);
     }

@@ -114,7 +114,11 @@
                         />
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Last Update" [width]="300" prop="last_updated_string"></ngx-datatable-column> -->
+                <ngx-datatable-column name="Last Update" [width]="300" prop="created">
+                    <ng-template ngx-datatable-cell-template let-value="value">
+                        {{ value | date: 'dd/MM/yyyy HH:mm:ss' }}
+                    </ng-template>
+                </ngx-datatable-column>
 
                 <ngx-datatable-footer>
                     <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount"

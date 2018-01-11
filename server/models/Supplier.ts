@@ -22,6 +22,7 @@ export class Supplier extends SupplierModel {
 
         return Supplier.find()
                 .select('-__v')
+                .sort({'created': -1})
                 .then((result: ISupplier[]) => result)
                 .catch((error: MongoError) => error);
     }

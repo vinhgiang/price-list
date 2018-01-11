@@ -29,14 +29,6 @@ export class ProductController {
 
     async select(req: Request, res: Response): Promise<Response> {
         const result = await Product.getProduct();
-        if( ! ( result instanceof MongoError ) ) {
-            result.map(e => {
-                var newObj = e._doc;
-                newObj.created_string = moment(e.created).format('DD-MM-YYYY HH:mm:ss');
-                newObj.last_updated_string = moment(e.last_update).format('DD-MM-YYYY HH:mm:ss');
-                return newObj;
-            });
-        }
         return ProductController.resolveAPIResponse(res, result);
     }
 

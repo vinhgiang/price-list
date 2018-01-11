@@ -41,6 +41,7 @@ export class Product extends ProductModel {
                 .populate('brand', 'name')
                 .populate('category', { name: 'name', ebay_au: 'ebay_au', ebay_uk: 'ebay_uk' } )
                 .select('-__v')
+                .sort({'last_update': -1})
                 .then((result: IProduct[]) => result)
                 .catch((error: MongoError) => error);
     }

@@ -20,6 +20,7 @@ export class Brand extends BrandModel {
     static getBrand(): Promise<IBrand[] | MongoError> {
         return Brand.find()
                 .select('-__v')
+                .sort({'created': -1})
                 .then((result: IBrand[]) => result)
                 .catch((error: MongoError) => error);
     }
