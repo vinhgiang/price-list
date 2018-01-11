@@ -14,15 +14,16 @@ import { SupplierServices } from '../../services/supplier.services';
 import { CategoryServices } from '../../services/category.services';
 import { ProductServices } from '../../services/product.services';
 
-import { MatSnackBar, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material'
-import { ToastMsgComponent } from '../../shared/toast-msg/toast-msg.component';
+import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material'
 import { Subscription } from 'rxjs/Subscription';
+
+import { CommonServices } from '../../services/common.services';
 
 @Component({
     selector: 'app-price-list',
     templateUrl: './price-list.component.html',
     styleUrls: ['./price-list.component.scss'],
-    providers: [BrandServices, SupplierServices, CategoryServices, ProductServices]
+    providers: [BrandServices, SupplierServices, CategoryServices, ProductServices, CommonServices]
 })
 export class PriceListComponent implements OnInit {
     suppliers: Supplier[];
@@ -56,7 +57,7 @@ export class PriceListComponent implements OnInit {
     @ViewChild(MatAutocompleteTrigger) trigger: MatAutocompleteTrigger;
 
     constructor(private brandServices: BrandServices, private supplierServices: SupplierServices, private categoryServices: CategoryServices,
-        private productServices: ProductServices, private snackBar: MatSnackBar) {
+        private productServices: ProductServices, private commonServices: CommonServices) {
 
         this.supplierCtrl = new FormControl();
         this.brandCtrl = new FormControl();
@@ -95,25 +96,27 @@ export class PriceListComponent implements OnInit {
     }
 
     async ngOnInit() {
-        this.suppliers = await this.supplierServices.getSupplier();
+        const suppliersResponse = await this.supplierServices.getSupplier();
+        this.suppliers = suppliersResponse.result;
         this.filteredSuppliers = this.supplierCtrl.valueChanges
             .startWith(null)
             .map(supplier => supplier ? this.filterSuppliers(supplier) : this.suppliers.slice());
 
-
-        this.brands = await this.brandServices.getBrands();
+        const brandRespone = await this.brandServices.getBrands();
+        this.brands = brandRespone.result;
         this.filteredBrands = this.brandCtrl.valueChanges
             .startWith(null)
             .map(brand => brand ? this.filterBrands(brand) : this.brands.slice());
 
-        this.categories = await this.categoryServices.getCategory();
+        const categoryResponse = await this.categoryServices.getCategory();
+        this.categories = categoryResponse.result;
         this.filteredCategories = this.categoryCtrl.valueChanges
             .startWith(null)
             .map(category => category ? this.filterCategories(category) : this.categories.slice());
 
         this.productServices.getProduct()
-            .then(list => {
-                this.products = list;
+            .then(res => {
+                this.products = res.result;
                 this.temp = [...this.products];
                 this.rows = this.products;
             })
@@ -157,13 +160,6 @@ export class PriceListComponent implements OnInit {
         this.categoryCtrl.setValue(event.option.value);
     }
 
-    toastMessage(msg: string, duration: number = 1000) {
-        this.snackBar.openFromComponent(ToastMsgComponent, {
-            duration: duration,
-            data: msg
-        });
-    }
-
     searchProduct() {
         const searchBrand = this.brand;
         const searchCategory = this.category;
@@ -188,13 +184,13 @@ export class PriceListComponent implements OnInit {
                     isCorrect = isCorrect && p.sku == searchSku;
                 }
 
-                return isCorrect;
+                return isCorrect;                
             });
 
             // update the rows
             this.rows = temp;
         } else {
-            this.toastMessage('Please give me a condition to search.');
+            this.commonServices.toastMessage('Please give me a condition to search.');
         }
     }
 
@@ -209,8 +205,9 @@ export class PriceListComponent implements OnInit {
 
     async updateValue(event, cell, rowIndex) {
         this.editing[rowIndex + '-' + cell] = false;
-        let curValue = this.products[rowIndex][cell];
+        let oldValue = this.products[rowIndex][cell];
         let newValue = event.target.value;
+
         if(cell == 'category') {
             let selectedNewCategory = this.categories.filter(category => category._id == newValue)[0];
             newValue = selectedNewCategory;
@@ -221,12 +218,11 @@ export class PriceListComponent implements OnInit {
 
         this.products[rowIndex][cell] = newValue;
 
-        const updateStatus = await this.productServices.updateProduct(this.products[rowIndex]);
-        if( updateStatus.status != 1 ) {
-            
-            this.products[rowIndex][cell] = curValue;
-            this.toastMessage(updateStatus.error, 3000);
-        }
+        const updateStatus = await this.productServices.updateProduct(this.products[rowIndex])
+            .catch(error => {
+                this.commonServices.toastMessage(error.json().msg, 2000)
+                this.products[rowIndex][cell] = oldValue;
+            });
     }
 
     onSelect({ selected }) {

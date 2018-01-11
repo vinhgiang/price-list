@@ -19,14 +19,13 @@ import { MatAutocompleteTrigger } from '@angular/material';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
-import { MatSnackBar } from '@angular/material'
-import { ToastMsgComponent } from '../../shared/toast-msg/toast-msg.component';
+import { CommonServices } from '../../services/common.services';
 
 @Component({
     selector: 'app-product-add',
     templateUrl: './product-add.component.html',
     styleUrls: ['./product-add.component.scss'],
-    providers: [BrandServices, SupplierServices, CategoryServices, ProductServices]
+    providers: [BrandServices, SupplierServices, CategoryServices, ProductServices, CommonServices]
 })
 export class ProductAddComponent implements OnInit {
 
@@ -56,7 +55,7 @@ export class ProductAddComponent implements OnInit {
     @ViewChild(MatAutocompleteTrigger) trigger: MatAutocompleteTrigger;
 
     constructor(private brandServices: BrandServices, private supplierServices: SupplierServices, private categoryServices: CategoryServices,
-        private productServices: ProductServices, private snackBar: MatSnackBar) {
+        private productServices: ProductServices, private commonServices: CommonServices) {
 
         this.supplierCtrl = new FormControl();
         this.brandCtrl = new FormControl();
@@ -89,18 +88,21 @@ export class ProductAddComponent implements OnInit {
     }
 
     async ngOnInit() {
-        this.suppliers = await this.supplierServices.getSupplier();
+        const suppliersResponse = await this.supplierServices.getSupplier();
+        this.suppliers = suppliersResponse.result;
         this.filteredSuppliers = this.supplierCtrl.valueChanges
             .startWith(null)
             .map(supplier => supplier ? this.filterSuppliers(supplier) : this.suppliers.slice());
 
 
-        this.brands = await this.brandServices.getBrands();
+        const brandRespone = await this.brandServices.getBrands();
+        this.brands = brandRespone.result;
         this.filteredBrands = this.brandCtrl.valueChanges
             .startWith(null)
             .map(brand => brand ? this.filterBrands(brand) : this.brands.slice());
 
-        this.categories = await this.categoryServices.getCategory();
+        const categoryResponse = await this.categoryServices.getCategory();
+        this.categories = categoryResponse.result;
         this.filteredCategories = this.categoryCtrl.valueChanges
             .startWith(null)
             .map(category => category ? this.filterCategories(category) : this.categories.slice());
@@ -128,8 +130,8 @@ export class ProductAddComponent implements OnInit {
         
         this.productServices.createProduct(formValue)
             .then(response => {
-                if( response.status == 1 ) {
-                    this.toastMessage(this.name + ' has been added');
+                if( response.status == 200 ) {
+                    this.commonServices.toastMessage(this.name + ' has been added');
 
                     this.sku = '';
                     this.name = '';
@@ -142,8 +144,11 @@ export class ProductAddComponent implements OnInit {
                     this.description = '';
                     this.price = 0;
                 } else {
-                    this.toastMessage(response.error, 3000);
+                    this.commonServices.toastMessage(response.msg, 3000);
                 }
+            })
+            .catch(error => {
+                this.commonServices.toastMessage(error.json().msg, 2000);
             });
     }
 
@@ -164,12 +169,5 @@ export class ProductAddComponent implements OnInit {
     onSelectedCategory(event: MatAutocompleteSelectedEvent): void {
         this.category = event.option.value._id;
         this.categoryCtrl.setValue(event.option.value);
-    }
-
-    toastMessage(msg: string, duration: number = 1000) {
-        this.snackBar.openFromComponent(ToastMsgComponent, {
-            duration: duration,
-            data: msg
-        });
     }
 }

@@ -13,6 +13,6 @@ export class ProductRouter {
     routes() {
         this.router.get('/list', this.productController.select);
         this.router.post('/add', this.productController.add);
-        this.router.put('/edit', this.productController.update);
+        this.router.post('/edit', this.productController.update);
     }
 }
