@@ -47,7 +47,7 @@ export class PriceListComponent implements OnInit {
     sku: string;
     name: string;
     description: string;
-    supplier: string;
+    supplier: ISupplier;
     brand: string;
     category: string;
     price: number;
@@ -86,7 +86,7 @@ export class PriceListComponent implements OnInit {
                     this.brandCtrl.setValue(null);
                     this.categoryCtrl.setValue(null);
 
-                    this.supplier = '';
+                    this.supplier = null;
                     this.brand = '';
                     this.category = '';
                 }
@@ -171,9 +171,9 @@ export class PriceListComponent implements OnInit {
 
                 let isCorrect = true;
 
-                // if ( searchSupplier ) {
-                //     isCorrect = isCorrect && p.supplier._id == searchSupplier;
-                // }
+                if ( searchSupplier ) {
+                    isCorrect = p.suppliers.some(e => e == searchSupplier);
+                }
                 if ( searchBrand ) {
                     isCorrect = isCorrect && p.brand._id == searchBrand;
                 }
