@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { Category } from '../../model/Category';
+import { ICategory } from '../../model/Category';
 import { CategoryServices } from '../../services/category.services';
 import { CommonServices } from '../../services/common.services';
 
@@ -11,7 +11,7 @@ import { CommonServices } from '../../services/common.services';
     providers: [CategoryServices, CommonServices]
 })
 export class CategoryListComponent implements OnInit {
-    categories: Category[];
+    categories: ICategory[];
     rows = [];
     temp = [];
     editing = {};

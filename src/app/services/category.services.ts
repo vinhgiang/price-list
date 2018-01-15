@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, HttpModule, Headers } from '@angular/http';
 import { environment } from '../../environments/environment';
-import { Category } from '../model/Category';
+import { ICategory } from '../model/Category';
 
 @Injectable()
 
@@ -21,14 +21,14 @@ export class CategoryServices {
             .then(result => result.json());
     }
 
-    createCategory(category: Category) {
+    createCategory(category: ICategory) {
         const url = this.modelUrl + '/add';
         const body = category;
         return this.http.post(url, body, { headers: this.headers } ).toPromise()
             .then(response => response.json());
     }
 
-    updateCategory(category: Category) {
+    updateCategory(category: ICategory) {
         const url = this.modelUrl + '/edit';
         const body = category;
         return this.http.post(url, body, { headers: this.headers } ).toPromise()

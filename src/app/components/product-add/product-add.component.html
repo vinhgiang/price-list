@@ -16,19 +16,8 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-2">
-                <mat-form-field>
-                    <input [(ngModel)]="supplier" name="supplier" matInput placeholder="Supplier" aria-label="Supplier" [matAutocomplete]="autoSupplier"
-                        [formControl]="supplierCtrl">
-                    <mat-autocomplete #autoSupplier="matAutocomplete" [displayWith]="displayValue" (optionSelected)="onSelectedSupplier($event)">
-                        <mat-option *ngFor="let supplier of filteredSuppliers | async" [value]="supplier">
-                            <span>{{ supplier.name }}</span>
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-            </div>
-            <div class="col-2">
-                <mat-form-field>
+            <div class="col-3">
+                <mat-form-field class="form-col-3">
                     <input [(ngModel)]="brand" name="brand" matInput placeholder="Brand" aria-label="Brand" [matAutocomplete]="autoBrand" [formControl]="brandCtrl">
                     <mat-autocomplete #autoBrand="matAutocomplete" [displayWith]="displayValue" (optionSelected)="onSelectedBrand($event)">
                         <mat-option *ngFor="let brand of filteredBrands | async" [value]="brand">
@@ -37,8 +26,8 @@
                     </mat-autocomplete>
                 </mat-form-field>
             </div>
-            <div class="col-2">
-                <mat-form-field>
+            <div class="col-3">
+                <mat-form-field class="form-col-3">
                     <input [(ngModel)]="category" name="category" matInput placeholder="Category" aria-label="Category" [matAutocomplete]="autoCategory"
                         [formControl]="categoryCtrl">
                     <mat-autocomplete #autoCategory="matAutocomplete" [displayWith]="displayValue" (optionSelected)="onSelectedCategory($event)">
@@ -60,9 +49,9 @@
 
         <div class="form-group row">
             <div class="col-6">
-                <mat-form-field class="form-col-6">
-                    <input [(ngModel)]="price" name="price" matInput placeholder="Price" value="">
-                </mat-form-field>
+                <section >
+                    <mat-checkbox *ngFor="let s of supplierList, let i = index" [(ngModel)]="supplierList[i].checked" name="supplierList[{{i}}]" [value]="s._id" >{{ s.name }}</mat-checkbox>
+                </section>
             </div>
         </div>
 

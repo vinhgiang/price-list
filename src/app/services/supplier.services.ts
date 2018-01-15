@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, HttpModule, Headers } from '@angular/http';
 import { environment } from '../../environments/environment';
-import { Supplier } from '../model/Supplier'
+import { ISupplier } from '../model/Supplier'
 
 @Injectable()
 
@@ -21,13 +21,13 @@ export class SupplierServices {
             .then(response => response.json());
     }
 
-    createSupplier(supplier: Supplier) {
+    createSupplier(supplier: ISupplier) {
         const url = this.modelUrl + '/add';
         return this.http.post(url, supplier, { headers: this.headers }).toPromise()
             .then(response => response.json());
     }
 
-    updateSupplier(supplier: Supplier) {
+    updateSupplier(supplier: ISupplier) {
         const url = this.modelUrl + '/edit';
         return this.http.post(url, supplier, { headers: this.headers }).toPromise()
             .then(response => response.json());

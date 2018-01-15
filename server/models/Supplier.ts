@@ -1,6 +1,4 @@
 import { Schema, model, Document } from 'mongoose';
-import * as moment from 'moment';
-import * as mongoose from 'mongoose'
 import { MongoError } from 'mongodb';
 
 export interface ISupplier extends Document {

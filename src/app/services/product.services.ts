@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, HttpModule, Headers } from '@angular/http';
 import { environment } from '../../environments/environment';
-import { Product } from '../model/Product';
+import { IProduct } from '../model/Product';
 
 @Injectable()
 
@@ -21,13 +21,13 @@ export class ProductServices {
             .then(response => response.json());
     }
 
-    createProduct(product: Product) {
+    createProduct(product: IProduct) {
         const url = this.modelUrl + '/add';
         return this.http.post(url, product, { headers: this.headers }).toPromise()
             .then(response => response.json());
     }
 
-    updateProduct(product: Product) {
+    updateProduct(product: IProduct) {
         const url = this.modelUrl + '/edit';
         return this.http.post(url, product, { headers: this.headers }).toPromise()
             .then(response => response.json());

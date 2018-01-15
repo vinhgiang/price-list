@@ -1,6 +1,4 @@
-import { Schema, model } from 'mongoose';
-import * as moment from 'moment';
-import { Document } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import { MongoError } from 'mongodb';
 
 export interface ICategory extends Document {

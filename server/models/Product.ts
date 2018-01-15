@@ -1,5 +1,4 @@
 import { Schema, model, Document } from 'mongoose';
-import * as moment from 'moment'
 import { MongoError } from 'mongodb';
 import { ICategory } from './Category';
 import { IBrand } from './Brand';
@@ -11,8 +10,9 @@ export interface IProduct extends Document {
     description: string;
     category: ICategory;
     brand: IBrand;
-    supplier: ISupplier;
+    suppliers: ISupplier[];
     price: number;
+    previous_price: number;
     created: Date;
     last_update: Date;
     [key: string] : any;
@@ -24,9 +24,9 @@ const ProductSchema = new Schema({
     description: { type: String, trim: true },
     category: { type: Schema.Types.ObjectId, ref: 'Category' },
     brand: { type: Schema.Types.ObjectId, ref: 'Brand' },
-    supplier: { type: Schema.Types.ObjectId, ref: 'Supplier' },
+    suppliers: [{ type: Schema.Types.ObjectId, ref: 'Supplier' }],
     previous_price: { type: Number, default: 0 },
-    price: { type: Number, required: true },
+    price: { type: Number },
     created: { type: Date, default: Date.now },
     last_update: { type: Date, default: Date.now },
 });

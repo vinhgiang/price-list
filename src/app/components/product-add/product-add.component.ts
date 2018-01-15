@@ -1,14 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators, FormGroup, FormArray, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
-import { Supplier } from '../../model/Supplier';
+import { ISupplier } from '../../model/Supplier';
 import { IBrand } from '../../model/Brand';
-import { Category } from '../../model/Category';
-import { Product } from '../../model/Product';
+import { ICategory } from '../../model/Category';
 
 import { BrandServices } from '../../services/brand.services';
 import { SupplierServices } from '../../services/supplier.services';
@@ -29,33 +28,33 @@ import { CommonServices } from '../../services/common.services';
 })
 export class ProductAddComponent implements OnInit {
 
-    suppliers: Supplier[];
-    brands: IBrand[];
-    categories: Category[];
+    supplierList: ISupplier[];
+    brandList: IBrand[];
+    categorieList: ICategory[];
 
     supplierCtrl: FormControl;
-    filteredSuppliers: Observable<Supplier[]>;
+    filteredSuppliers: Observable<ISupplier[]>;
 
     brandCtrl: FormControl;
     filteredBrands: Observable<IBrand[]>;
 
     categoryCtrl: FormControl;
-    filteredCategories: Observable<Category[]>;
+    filteredCategories: Observable<ICategory[]>;
 
     sku: string;
     name: string;
     description: string;
-    supplier: string;
+    suppliers: ISupplier[];
     brand: string;
     category: string;
-    price: number;
+    price: number[];
 
     subscription: Subscription;
 
     @ViewChild(MatAutocompleteTrigger) trigger: MatAutocompleteTrigger;
 
     constructor(private brandServices: BrandServices, private supplierServices: SupplierServices, private categoryServices: CategoryServices,
-        private productServices: ProductServices, private commonServices: CommonServices) {
+        private productServices: ProductServices, private commonServices: CommonServices, private formBuilder: FormBuilder ) {
 
         this.supplierCtrl = new FormControl();
         this.brandCtrl = new FormControl();
@@ -89,60 +88,51 @@ export class ProductAddComponent implements OnInit {
 
     async ngOnInit() {
         const suppliersResponse = await this.supplierServices.getSupplier();
-        this.suppliers = suppliersResponse.result;
-        this.filteredSuppliers = this.supplierCtrl.valueChanges
-            .startWith(null)
-            .map(supplier => supplier ? this.filterSuppliers(supplier) : this.suppliers.slice());
-
+        this.supplierList = suppliersResponse.result;
+        // this.filteredSuppliers = this.supplierCtrl.valueChanges
+        //     .startWith(null)
+        //     .map(supplier => supplier ? this.filterSuppliers(supplier) : this.supplierList.slice());
 
         const brandRespone = await this.brandServices.getBrands();
-        this.brands = brandRespone.result;
+        this.brandList = brandRespone.result;
         this.filteredBrands = this.brandCtrl.valueChanges
             .startWith(null)
-            .map(brand => brand ? this.filterBrands(brand) : this.brands.slice());
+            .map(brand => brand ? this.filterBrands(brand) : this.brandList.slice());
 
         const categoryResponse = await this.categoryServices.getCategory();
-        this.categories = categoryResponse.result;
+        this.categorieList = categoryResponse.result;
         this.filteredCategories = this.categoryCtrl.valueChanges
             .startWith(null)
-            .map(category => category ? this.filterCategories(category) : this.categories.slice());
+            .map(category => category ? this.filterCategories(category) : this.categorieList.slice());
     }
 
-    filterSuppliers(supplier: Supplier | string) {
+    filterSuppliers(supplier: ISupplier | string) {
         const supplierName = typeof supplier === 'object' ? supplier.name : supplier;
-        return this.suppliers.filter(supplier => supplier.name.toLowerCase().indexOf(supplierName.toLowerCase()) === 0);
+        return this.supplierList.filter(supplier => supplier.name.toLowerCase().indexOf(supplierName.toLowerCase()) === 0);
     }
 
     filterBrands(brand: IBrand) {
         const brandName = typeof brand === 'object' ? brand.name : brand;
-        return this.brands.filter(brand => brand.name.toLowerCase().indexOf(brandName.toLowerCase()) === 0);
+        return this.brandList.filter(brand => brand.name.toLowerCase().indexOf(brandName.toLowerCase()) === 0);
     }
 
-    filterCategories(category: Category) {
+    filterCategories(category: ICategory) {
         const categoryName = typeof category === 'object' ? category.name : category;
-        return this.categories.filter(category => category.name.toLowerCase().indexOf(categoryName.toLowerCase()) === 0);
+        return this.categorieList.filter(category => category.name.toLowerCase().indexOf(categoryName.toLowerCase()) === 0);
     }
 
     onSubmit(formValue) {
-        formValue.supplier = this.supplier;
         formValue.brand = this.brand;
         formValue.category = this.category;
-        
+
+        let selectedSuppliers = this.supplierList.filter(e => e.checked == true);
+        formValue.suppliers = selectedSuppliers;
+
         this.productServices.createProduct(formValue)
             .then(response => {
                 if( response.status == 200 ) {
                     this.commonServices.toastMessage(this.name + ' has been added');
-
-                    this.sku = '';
-                    this.name = '';
-                    this.supplier = '';
-                    this.supplierCtrl.setValue('');
-                    this.brand = '';
-                    this.brandCtrl.setValue('');
-                    this.category = '';
-                    this.categoryCtrl.setValue('');
-                    this.description = '';
-                    this.price = 0;
+                    this.resetForm();
                 } else {
                     this.commonServices.toastMessage(response.msg, 3000);
                 }
@@ -156,10 +146,10 @@ export class ProductAddComponent implements OnInit {
         return obj ? obj.name : '';
     }
 
-    onSelectedSupplier(event: MatAutocompleteSelectedEvent): void {
-        this.supplier = event.option.value._id;
-        this.supplierCtrl.setValue(event.option.value);
-    }
+    // onSelectedSupplier(event: MatAutocompleteSelectedEvent): void {
+    //     this.supplier = event.option.value._id;
+    //     this.supplierCtrl.setValue(event.option.value);
+    // }
 
     onSelectedBrand(event: MatAutocompleteSelectedEvent): void {
         this.brand = event.option.value._id;
@@ -169,5 +159,17 @@ export class ProductAddComponent implements OnInit {
     onSelectedCategory(event: MatAutocompleteSelectedEvent): void {
         this.category = event.option.value._id;
         this.categoryCtrl.setValue(event.option.value);
+    }
+
+    resetForm() {
+        this.sku = '';
+        this.name = '';
+        this.supplierList.map(e => e.checked = false);
+        this.supplierCtrl.setValue('');
+        this.brand = '';
+        this.brandCtrl.setValue('');
+        this.category = '';
+        this.categoryCtrl.setValue('');
+        this.description = '';
     }
 }

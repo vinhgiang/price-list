@@ -4,10 +4,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
-import { Supplier } from '../../model/Supplier';
+import { ISupplier } from '../../model/Supplier';
 import { IBrand } from '../../model/Brand';
-import { Category } from '../../model/Category';
-import { Product } from '../../model/Product';
+import { ICategory } from '../../model/Category';
+import { IProduct } from '../../model/Product';
 
 import { BrandServices } from '../../services/brand.services';
 import { SupplierServices } from '../../services/supplier.services';
@@ -26,20 +26,20 @@ import { CommonServices } from '../../services/common.services';
     providers: [BrandServices, SupplierServices, CategoryServices, ProductServices, CommonServices]
 })
 export class PriceListComponent implements OnInit {
-    suppliers: Supplier[];
+    suppliers: ISupplier[];
     brands: IBrand[];
-    categories: Category[];
+    categories: ICategory[];
 
     supplierCtrl: FormControl;
-    filteredSuppliers: Observable<Supplier[]>;
+    filteredSuppliers: Observable<ISupplier[]>;
 
     brandCtrl: FormControl;
     filteredBrands: Observable<IBrand[]>;
 
     categoryCtrl: FormControl;
-    filteredCategories: Observable<Category[]>;
+    filteredCategories: Observable<ICategory[]>;
 
-    products: Product[];
+    products: IProduct[];
     rows = [];
     temp = [];
     editing = [];
@@ -122,7 +122,7 @@ export class PriceListComponent implements OnInit {
             })
     }
 
-    filterSuppliers(supplier: Supplier | string) {
+    filterSuppliers(supplier: ISupplier | string) {
         const supplierName = typeof supplier === 'object' ? supplier.name : supplier;
         return this.suppliers.filter(supplier => supplier.name.toLowerCase().indexOf(supplierName.toLowerCase()) === 0);
     }
@@ -132,7 +132,7 @@ export class PriceListComponent implements OnInit {
         return this.brands.filter(brand => brand.name.toLowerCase().indexOf(brandName.toLowerCase()) === 0);
     }
 
-    filterCategories(category: Category) {
+    filterCategories(category: ICategory) {
         const categoryName = typeof category === 'object' ? category.name : category;
         return this.categories.filter(category => category.name.toLowerCase().indexOf(categoryName.toLowerCase()) === 0);
     }
@@ -167,13 +167,13 @@ export class PriceListComponent implements OnInit {
         const searchSku = this.sku;
 
         if ( searchBrand || searchCategory || searchSupplier || searchSku ) {
-            const temp = this.temp.filter(function (p: Product) {
+            const temp = this.temp.filter(function (p: IProduct) {
 
                 let isCorrect = true;
 
-                if ( searchSupplier ) {
-                    isCorrect = isCorrect && p.supplier._id == searchSupplier;
-                }
+                // if ( searchSupplier ) {
+                //     isCorrect = isCorrect && p.supplier._id == searchSupplier;
+                // }
                 if ( searchBrand ) {
                     isCorrect = isCorrect && p.brand._id == searchBrand;
                 }

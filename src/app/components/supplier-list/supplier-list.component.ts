@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { Supplier } from '../../model/Supplier';
+import { ISupplier } from '../../model/Supplier';
 import { SupplierServices } from '../../services/supplier.services';
 import { CommonServices } from '../../services/common.services';
 
@@ -11,7 +11,7 @@ import { CommonServices } from '../../services/common.services';
     providers: [SupplierServices, CommonServices]
 })
 export class SupplierListComponent implements OnInit {
-    suppliers: Supplier[];
+    suppliers: ISupplier[];
     rows = [];
     temp = [];
     editing = [];

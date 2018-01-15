@@ -1,14 +1,14 @@
-import { Category } from "./Category";
+import { ICategory } from "./Category";
 import { IBrand } from "./Brand";
-import { Supplier } from "./Supplier";
+import { ISupplier } from "./Supplier";
 
-export interface Product {
+export interface IProduct {
     _id?: string;
     sku: string;
     name: string;
     description: string;
-    supplier: Supplier;
-    category: Category;
+    suppliers: ISupplier[];
+    category: ICategory;
     brand: IBrand;
     price: number;
     created: Date;
