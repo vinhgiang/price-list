@@ -2,16 +2,16 @@ import { Document, Schema, model } from 'mongoose';
 import { MongoError } from 'mongodb';
 
 export interface IProductSupplier extends Document {
-    supplier_id: string,
     product_id: string,
+    supplier_id: string,
     price: number,
     version: number,
     created: Date
 }
 
 const ProductSupplierSchema = new Schema({
-    product_id: { type: String, required: true, trim: true },
-    supplier_id: { type: String, required: true, trim: true },
+    product_id: { type: Schema.Types.ObjectId, ref: 'Product' },
+    supplier_id: { type: Schema.Types.ObjectId, ref: 'Supplier' },
     price: { type: Number, required: true },
     version: { type: Number, default: 0 },
     created: { type: Date, default: Date.now }
@@ -23,18 +23,19 @@ const ProductSupplierModel = model<IProductSupplier>('Product-Supplier', Product
 
 export class ProductSupplier extends ProductSupplierModel {
 
-    static getProductSupplier(version: number = null): Promise<IProductSupplier[] | MongoError> {
-        return ProductSupplier.find({})
+    static getProductSupplier(product_id: string, version: number = null): Promise<IProductSupplier[] | MongoError> {
+        return ProductSupplier.find({product_id, version})
                 .select('-__v')
+                .populate('supplier_id', 'name')
                 .sort({'created': -1})
                 .then((result: IProductSupplier[]) => result)
                 .catch((error: MongoError) => error);
     }
 
-    // static createProductSupplier(newProductSupplier: ProductSupplier | ProductSupplier[]): Promise<IProductSupplier | MongoError> {
-    //     return ProductSupplierModel.create(newProductSupplier)
-    //         .then((results: IProductSupplier) => results)
-    //         .catch((error: MongoError) => error);
-    // }
+    static createProductSupplier(newProductSupplier: ProductSupplier | ProductSupplier[]): Promise<IProductSupplier | MongoError> {
+        return ProductSupplierModel.create(newProductSupplier)
+            .then((results: IProductSupplier) => results)
+            .catch((error: MongoError) => error);
+    }
 
 }

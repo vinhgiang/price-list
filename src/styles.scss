@@ -132,3 +132,11 @@ body {
     margin: 0 20px 10px 0;
     display: inline-block;
 }
+
+.supplier-price-list {
+    padding: 0 0 0 30px;
+    .supplier-name {
+        width: 255px;
+        display: inline-block;
+    }
+}

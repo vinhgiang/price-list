@@ -13,6 +13,7 @@ export interface IProduct extends Document {
     suppliers: ISupplier[];
     price: number;
     previous_price: number;
+    version: number;
     created: Date;
     last_update: Date;
     [key: string] : any;
@@ -27,6 +28,7 @@ const ProductSchema = new Schema({
     suppliers: [{ type: Schema.Types.ObjectId, ref: 'Supplier' }],
     previous_price: { type: Number, default: 0 },
     price: { type: Number },
+    version: { type: Number, default: 0 },
     created: { type: Date, default: Date.now },
     last_update: { type: Date, default: Date.now },
 });
@@ -37,7 +39,7 @@ export class Product extends ProductModel {
 
     static getProduct(): Promise<IProduct[] | MongoError> {
         return Product.find({})
-                .populate('supplier', 'name')
+                .populate('suppliers', 'name')
                 .populate('brand', 'name')
                 .populate('category', { name: 'name', ebay_au: 'ebay_au', ebay_uk: 'ebay_uk' } )
                 .select('-__v')

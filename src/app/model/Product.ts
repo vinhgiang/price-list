@@ -1,6 +1,7 @@
 import { ICategory } from "./Category";
 import { IBrand } from "./Brand";
 import { ISupplier } from "./Supplier";
+import { IProductSupplier } from "./Product-Supplier";
 
 export interface IProduct {
     _id?: string;
@@ -11,6 +12,12 @@ export interface IProduct {
     category: ICategory;
     brand: IBrand;
     price: number;
-    created: Date;
+    version: number;
     last_update: Date;
+    created: Date;
+    price_list?: {
+        supplier: ISupplier,
+        price: string,
+    }[];
+    [key: string]: any;
 }

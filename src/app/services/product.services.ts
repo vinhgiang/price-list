@@ -32,4 +32,16 @@ export class ProductServices {
         return this.http.post(url, product, { headers: this.headers }).toPromise()
             .then(response => response.json());
     }
+
+    getProductPrice(productId: string, version: number) {
+        const url = this.modelUrl + '/price/' + productId + '/' + version;
+        return this.http.get(url).toPromise()
+            .then(response => response.json());
+    }
+
+    updateProductPrice(product: IProduct) {
+        const url = this.modelUrl + '/price';
+        return this.http.post(url, product, { headers: this.headers }).toPromise()
+            .then(response => response.json());
+    }
 }

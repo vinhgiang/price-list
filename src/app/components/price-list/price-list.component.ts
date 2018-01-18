@@ -18,6 +18,7 @@ import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/m
 import { Subscription } from 'rxjs/Subscription';
 
 import { CommonServices } from '../../services/common.services';
+import { IProductSupplier } from '../../model/Product-Supplier';
 
 @Component({
     selector: 'app-price-list',
@@ -55,6 +56,8 @@ export class PriceListComponent implements OnInit {
     subscription: Subscription;
 
     @ViewChild(MatAutocompleteTrigger) trigger: MatAutocompleteTrigger;
+    
+    @ViewChild('productsTable') table: any;
 
     constructor(private brandServices: BrandServices, private supplierServices: SupplierServices, private categoryServices: CategoryServices,
         private productServices: ProductServices, private commonServices: CommonServices) {
@@ -218,7 +221,7 @@ export class PriceListComponent implements OnInit {
 
         this.products[rowIndex][cell] = newValue;
 
-        const updateStatus = await this.productServices.updateProduct(this.products[rowIndex])
+        this.productServices.updateProduct(this.products[rowIndex])
             .catch(error => {
                 this.commonServices.toastMessage(error.json().msg, 2000)
                 this.products[rowIndex][cell] = oldValue;
@@ -231,6 +234,53 @@ export class PriceListComponent implements OnInit {
 
     onActivate(event) {
         console.log('Activate Event', event);
+    }
+
+    toggleExpandRow(row: IProduct) {
+        const version = row.version;
+        if( version > 0 ) {
+            const productId = row._id;
+            const list = this.productServices.getProductPrice(productId, version)
+                .then(res => {
+                    const priceList = res.result;
+                    const newPriceList = [];
+                    priceList.forEach(e => {
+                        let item = {
+                            'supplier': e.supplier_id,
+                            'price': e.price
+                        };
+                        newPriceList.push(item);
+                    });
+                    row.price_list = newPriceList;
+                    this.table.rowDetail.toggleExpandRow(row);
+                })
+                .catch(error => {
+                    this.commonServices.toastMessage(error.json().msg, 2000)
+                });
+        } else {
+            const priceList = [];
+            row.suppliers.forEach((supplier: ISupplier) => {
+                let item = {
+                    'supplier': supplier,
+                    'price': ''
+                }
+                priceList.push(item);
+            });
+            row.price_list = priceList;
+            this.table.rowDetail.toggleExpandRow(row);
+        }
+    }
+    
+    onDetailToggle(event) {
+        console.log('Detail Toggled', event);
+    }
+
+    updatePrice(row: IProduct) {
+        const product = row;
+        this.productServices.updateProductPrice(product)
+            .catch(error => {
+                this.commonServices.toastMessage(error.json().msg, 2000)
+            });
     }
 
 }

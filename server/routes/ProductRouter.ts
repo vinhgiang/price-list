@@ -14,5 +14,7 @@ export class ProductRouter {
         this.router.get('/list', this.productController.select);
         this.router.post('/add', this.productController.add);
         this.router.post('/edit', this.productController.update);
+        this.router.get('/price/:id/:version', this.productController.getProductPrice);
+        this.router.post('/price', this.productController.updateProductPrice);
     }
 }

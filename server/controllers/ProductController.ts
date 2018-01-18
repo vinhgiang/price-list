@@ -12,7 +12,7 @@ export class ProductController {
         });
     }
 
-    private static resolveAPIResponse(res: Response, result: IProduct | IProduct[] | MongoError = null): Response {
+    private static resolveAPIResponse(res: Response, result: IProduct | IProduct[] | IProductSupplier | IProductSupplier[] | MongoError = null): Response {
         if ( result instanceof MongoError ) {
             return res.status(500).json({
                 status: 500,
@@ -56,7 +56,7 @@ export class ProductController {
         newProduct.category = category;
         newProduct.brand = brand;
         newProduct.suppliers = suppliers;
-
+        
         // let arrProductSupplier = [];
 
         // for (var i = 0; i < 5; i++) {
@@ -73,7 +73,7 @@ export class ProductController {
         return ProductController.resolveAPIResponse(res, newProduct);
     }
 
-    async update(req: Request, res: Response) {
+    async update(req: Request, res: Response): Promise<Response> {
         const { _id, sku, name, description, category, brand, supplier, price } = req.body;
 
         if ( ! sku ) {
@@ -98,5 +98,37 @@ export class ProductController {
         const data = { sku, name, description, category, brand, supplier, price };
         const result = await Product.updateProduct(_id, data)
         return ProductController.resolveAPIResponse(res, result);
+    }
+
+    async getProductPrice(req: Request, res: Response): Promise<Response> {
+        const product_id = req.params.id;
+        const version = req.params.version;
+
+        const result = await ProductSupplier.getProductSupplier(product_id, version);
+        return ProductController.resolveAPIResponse(res, result);
+    }
+
+    async updateProductPrice(req: Request, res: Response): Promise<Response> {
+        const { _id, price_list, version } = req.body;
+        const newVersion = version + 1;
+
+        const newPriceList = [];
+        price_list.forEach(e => {
+            let productSupplier = {
+                product_id: _id,
+                supplier_id: e.supplier._id,
+                price: parseFloat( e.price ),
+                version: newVersion
+            }
+            newPriceList.push(productSupplier);
+        })
+
+        try {
+            const updateProduct = await Product.updateProduct(_id, { version: newVersion });
+            const result = await ProductSupplier.createProductSupplier(newPriceList);
+            return ProductController.resolveAPIResponse(res, result);
+        } catch (e) {
+            return ProductController.resolveErrorResponse(res, 'Could not update product version. ' + e.message, 400);
+        }
     }
 }

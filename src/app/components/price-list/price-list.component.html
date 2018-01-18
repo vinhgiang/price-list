@@ -50,6 +50,33 @@
             <ngx-datatable #productsTable class="material fullscreen" [rows]="rows" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
                 [rowHeight]="auto" [limit]="5" [selectionType]="'single'">
 
+                <ngx-datatable-row-detail [rowHeight]="auto" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <div style="padding-left: 50px;">
+                            <div><strong>Suppliers</strong></div>
+                            <div class="supplier-price-list">
+                                <div *ngFor="let s of row.price_list">
+                                    <p class="supplier-name">{{s.supplier.name}}</p>
+                                    <mat-form-field class="supplier-price">
+                                        <input [(ngModel)]="s.price" name="price" matInput value="{{s.price}}">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <button (click)="updatePrice(row)" mat-raised-button color="primary" class="fr">Update</button>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>   
+                
+                <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                        <a [class.datatable-icon-right]="!expanded"
+                            [class.datatable-icon-down]="expanded"
+                            title="Expand/Collapse Row"
+                            (click)="toggleExpandRow(row)">
+                        </a>
+                    </ng-template>
+                </ngx-datatable-column>
+
                 <ngx-datatable-column name="No" [width]="50">
                     <ng-template let-rowIndex="rowIndex + 1" let-row="row" ngx-datatable-cell-template>
                         {{rowIndex}}
