@@ -15,8 +15,9 @@ export class ProductServices {
         this.headers.append('Content-Type', 'Application/JSON');
     }
 
-    getProduct() {
-        const url = this.modelUrl + '/list';
+    getProduct(id: string = null) {
+        let url = id ? this.modelUrl + '/' + id : this.modelUrl + '/list'
+        
         return this.http.get(url).toPromise()
             .then(response => response.json());
     }

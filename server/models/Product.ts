@@ -37,8 +37,10 @@ const ProductModel = model<IProduct>('Product', ProductSchema);
 
 export class Product extends ProductModel {
 
-    static getProduct(): Promise<IProduct[] | MongoError> {
-        return Product.find({})
+    static getProduct(id: string = null): Promise<IProduct[] | MongoError> {
+        const cond = id ? { _id: id } : { };
+        
+        return Product.find(cond)
                 .populate('suppliers', 'name')
                 .populate('brand', 'name')
                 .populate('category', { name: 'name', ebay_au: 'ebay_au', ebay_uk: 'ebay_uk' } )

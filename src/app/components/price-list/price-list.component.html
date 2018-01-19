@@ -132,7 +132,7 @@
                         </select>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Price" [width]="100">
+                <!-- <ngx-datatable-column name="Price" [width]="100">
                     <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
                         <span title="Double click to edit" (dblclick)="editing[rowIndex + '-price'] = true" *ngIf=" ! editing[rowIndex + '-price']">
                             {{value}}
@@ -140,10 +140,16 @@
                         <input autofocus (blur)="updateValue($event, 'price', rowIndex)" *ngIf="editing[rowIndex+ '-price']" type="text" [value]="value"
                         />
                     </ng-template>
-                </ngx-datatable-column>
+                </ngx-datatable-column> -->
                 <ngx-datatable-column name="Last Update" [width]="300" prop="created">
                     <ng-template ngx-datatable-cell-template let-value="value">
                         {{ value | date: 'dd/MM/yyyy HH:mm:ss' }}
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Action" prop="_id">
+                    <ng-template ngx-datatable-cell-template let-value="value">
+                        <a routerLink="/product/edit/{{value}}" class="">Edit</a>
                     </ng-template>
                 </ngx-datatable-column>
 

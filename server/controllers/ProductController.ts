@@ -29,7 +29,8 @@ export class ProductController {
     }
 
     async select(req: Request, res: Response): Promise<Response> {
-        const result = await Product.getProduct();
+        const { id } = req.params;
+        const result = id ? await Product.getProduct(id) : await Product.getProduct();
         return ProductController.resolveAPIResponse(res, result);
     }
 
@@ -74,8 +75,10 @@ export class ProductController {
     }
 
     async update(req: Request, res: Response): Promise<Response> {
-        const { _id, sku, name, description, category, brand, supplier, price } = req.body;
-
+        const { _id, sku, name, description, category, brand, suppliers } = req.body;
+        // TO-DO: update lowest price from suppliers
+        const price = 0;
+        
         if ( ! sku ) {
             return ProductController.resolveErrorResponse(res, 'SKU cannot be emptied', 400);
         }
@@ -88,14 +91,11 @@ export class ProductController {
         if ( ! brand ) {
             return ProductController.resolveErrorResponse(res, 'Brand cannot be emptied', 400);
         }
-        if ( ! supplier ) {
+        if ( ! suppliers ) {
             return ProductController.resolveErrorResponse(res, 'Supplier cannot be emptied', 400);
         }
-        if ( ! price ) {
-            return ProductController.resolveErrorResponse(res, 'Price cannot be emptied', 400);
-        }
 
-        const data = { sku, name, description, category, brand, supplier, price };
+        const data = { sku, name, description, category, brand, suppliers, price };
         const result = await Product.updateProduct(_id, data)
         return ProductController.resolveAPIResponse(res, result);
     }

@@ -22,6 +22,7 @@ const config: Routes = [
     { path: '', redirectTo: 'product/list', pathMatch: 'full' },
     { path: 'product/list', component: PriceListComponent },
     { path: 'product/add', component: ProductAddComponent },
+    { path: 'product/edit/:id', component: ProductAddComponent },
     { path: 'supplier/list', component: SupplierListComponent },
     { path: 'supplier/add', component: SupplierAddComponent },
     { path: 'brand/list', component: BrandListComponent },

@@ -12,12 +12,29 @@ export interface IProduct {
     category: ICategory;
     brand: IBrand;
     price: number;
-    version: number;
-    last_update: Date;
-    created: Date;
+    version?: number;
+    last_update?: Date;
+    created?: Date;
     price_list?: {
         supplier: ISupplier,
         price: string,
     }[];
     [key: string]: any;
+}
+
+export class Product {
+    product: IProduct;
+
+    constructor() {
+        this.product = {
+            _id: '',
+            sku: '',
+            name: '',
+            description: '',
+            suppliers: null,
+            brand: null,
+            category: null,
+            price: 0
+        };
+    }
 }
