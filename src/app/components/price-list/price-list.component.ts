@@ -236,21 +236,45 @@ export class PriceListComponent implements OnInit {
         console.log('Activate Event', event);
     }
 
-    toggleExpandRow(row: IProduct) {
+    toggleExpandRow(row: IProduct, expanded) {
         const version = row.version;
-        if( version > 0 ) {
+
+        if( version > 0 && ! expanded ) {
             const productId = row._id;
-            const list = this.productServices.getProductPrice(productId, version)
-                .then(res => {
+            this.productServices.getProductPrice(productId, version)
+                .then(async res => {
                     const priceList = res.result;
                     const newPriceList = [];
-                    priceList.forEach(e => {
+                    let versionList;
+                    
+                    if ( version > 1) {
+                        let previousVersion: number[] = [];
+                        for ( let i = 1; i <= 3 && version - i > 0; i++ ) {
+                            previousVersion.push(version - i);
+                        }
+
+                        versionList = await this.productServices.getProductPrice(productId, previousVersion);
+                        versionList = versionList.result;
+                    }
+
+                    priceList.forEach( (e: IProductSupplier ) => {
+                        let priceVersion = [];
+                        if( versionList ) {
+                            versionList.forEach( (v: IProductSupplier) => {
+                                if( v.supplier_id._id == e.supplier_id._id ) {
+                                    priceVersion.push(v);
+                                }
+                            });
+                        }
+
                         let item = {
                             'supplier': e.supplier_id,
-                            'price': e.price
+                            'price': e.price,
+                            'version': priceVersion
                         };
                         newPriceList.push(item);
                     });
+
                     row.price_list = newPriceList;
                     this.table.rowDetail.toggleExpandRow(row);
                 })

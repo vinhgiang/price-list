@@ -60,6 +60,12 @@
                                     <mat-form-field class="supplier-price">
                                         <input [(ngModel)]="s.price" name="price" matInput value="{{s.price}}">
                                     </mat-form-field>
+                                    <div class="history">
+                                        <div *ngFor="let v of s.version" class="history-item">
+                                            <strong>{{ v.price | number: '1.2' }}</strong>
+                                            <span>{{ v.created | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <button (click)="updatePrice(row)" mat-raised-button color="primary" class="fr">Update</button>
@@ -72,7 +78,7 @@
                         <a [class.datatable-icon-right]="!expanded"
                             [class.datatable-icon-down]="expanded"
                             title="Expand/Collapse Row"
-                            (click)="toggleExpandRow(row)">
+                            (click)="toggleExpandRow(row, expanded)">
                         </a>
                     </ng-template>
                 </ngx-datatable-column>

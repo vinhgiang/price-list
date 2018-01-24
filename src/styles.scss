@@ -143,8 +143,15 @@ body {
 
 .datatable-row-detail {
     height: auto !important;
+    .history {
+        display: inline-block;
+        margin-left: 100px;
+        &-item {
+            display: inline-block;
+            padding: 0 30px;
+            strong {
+                margin-right: 10px;
+            }
+        }
+    }
 }
-
-// .datatable-body-row {
-//     height: auto !
-// }

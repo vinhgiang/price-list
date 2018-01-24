@@ -34,7 +34,8 @@ export class ProductServices {
             .then(response => response.json());
     }
 
-    getProductPrice(productId: string, version: number) {
+    getProductPrice(productId: string, version: number | number []) {
+        console.log(version);
         const url = this.modelUrl + '/price/' + productId + '/' + version;
         return this.http.get(url).toPromise()
             .then(response => response.json());

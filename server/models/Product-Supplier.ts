@@ -23,8 +23,13 @@ const ProductSupplierModel = model<IProductSupplier>('Product-Supplier', Product
 
 export class ProductSupplier extends ProductSupplierModel {
 
-    static getProductSupplier(product_id: string, version: number = null): Promise<IProductSupplier[] | MongoError> {
-        return ProductSupplier.find({product_id, version})
+    static getProductSupplier(product_id: string, requestVersion: string = null): Promise<IProductSupplier[] | MongoError> {
+        let version = requestVersion.split(',');
+        
+        return ProductSupplier.find({
+                    product_id, 
+                    version: { $in: version }
+                })
                 .select('-__v')
                 .populate('supplier_id', 'name')
                 .sort({'created': -1})
