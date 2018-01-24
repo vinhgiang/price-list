@@ -13,8 +13,6 @@ import { CategoryRouter } from './routes/CategoryRouter';
 import { SupplierRouter } from './routes/SupplierRouter';
 import { ProductRouter } from './routes/ProductRouter';
 
-import './db';
-
 class App {
     public app: express.Application;
     public mongoDbURI: string;

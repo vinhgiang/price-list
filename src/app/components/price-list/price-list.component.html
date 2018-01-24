@@ -48,9 +48,9 @@
     <div class="form-group row">
         <div class="col-12">
             <ngx-datatable #productsTable class="material fullscreen" [rows]="rows" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
-                [rowHeight]="auto" [limit]="5" [selectionType]="'single'">
+                [rowHeight]="40" [limit]="5" [selectionType]="'single'">
 
-                <ngx-datatable-row-detail [rowHeight]="auto" #myDetailRow (toggle)="onDetailToggle($event)">
+                <ngx-datatable-row-detail #myDetailRow (toggle)="onDetailToggle($event)">
                     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                         <div style="padding-left: 50px;">
                             <div><strong>Suppliers</strong></div>
