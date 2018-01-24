@@ -3,6 +3,7 @@ import { IProduct, Product } from "../models/Product";
 import { IProductSupplier, ProductSupplier } from '../models/Product-Supplier';
 import { MongoError } from "mongodb";
 import * as moment from 'moment';
+import { ISupplier } from "../models/Supplier";
 
 export class ProductController {
     private static resolveErrorResponse(res: Response, msg: string, statusCode: number): Response {
@@ -57,18 +58,17 @@ export class ProductController {
         newProduct.category = category;
         newProduct.brand = brand;
         newProduct.suppliers = suppliers;
-        
-        // let arrProductSupplier = [];
 
-        // for (var i = 0; i < 5; i++) {
-        //     const newProductSupplier = new ProductSupplier();
-        //     newProductSupplier.product_id = newProduct._id;
-        //     newProductSupplier.supplier_id = '5a3a9dde5f75f80b4da9f8d3' + i;
-        //     newProductSupplier.price = 99.99;
-        //     arrProductSupplier.push(newProductSupplier);
-        // }
+        const arrProductSupplier = [];
+        suppliers.forEach((s: ISupplier) => {
+            let newProductSupplier = new ProductSupplier();
+            newProductSupplier.product_id = newProduct._id;
+            newProductSupplier.supplier_id = s._id;
+            newProductSupplier.price = 0;
+            arrProductSupplier.push(newProductSupplier);
+        });
 
-        // ProductSupplier.createProductSupplier(arrProductSupplier);
+        ProductSupplier.createProductSupplier(arrProductSupplier);
 
         const result = await Product.createProduct(newProduct);
         return ProductController.resolveAPIResponse(res, newProduct);
