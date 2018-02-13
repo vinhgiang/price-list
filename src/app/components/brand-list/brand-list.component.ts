@@ -53,19 +53,17 @@ export class BrandListComponent implements OnInit {
 
     updateValue(event, cell, rowIndex) {
         let newValue = event.target.value;
-        let oldValue = this.brands[rowIndex][cell];
+        let oldValue = this.rows[rowIndex][cell];
 
         this.editing[rowIndex + '-' + cell] = false;
         
-        this.brands[rowIndex][cell] = newValue;
+        this.rows[rowIndex][cell] = newValue;
 
-        this.brandServices.updateBrand(this.brands[rowIndex])
+        this.brandServices.updateBrand(this.rows[rowIndex])
             .catch(error => {
                 this.commonServices.toastMessage(error.json().msg, 2000)
-                this.brands[rowIndex][cell] = oldValue;
+                this.rows[rowIndex][cell] = oldValue;
             });
-
-        this.brands = [...this.brands];
     }
 
 }

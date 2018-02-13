@@ -82,9 +82,9 @@ export class ProductController {
         if ( ! sku ) {
             return ProductController.resolveErrorResponse(res, 'SKU cannot be emptied', 400);
         }
-        if ( ! name ) {
-            return ProductController.resolveErrorResponse(res, 'Name cannot be emptied', 400);
-        }
+        // if ( ! name ) {
+        //     return ProductController.resolveErrorResponse(res, 'Name cannot be emptied', 400);
+        // }
         if ( ! category ) {
             return ProductController.resolveErrorResponse(res, 'Category cannot be emptied', 400);
         }

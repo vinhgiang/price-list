@@ -208,7 +208,7 @@ export class PriceListComponent implements OnInit {
 
     async updateValue(event, cell, rowIndex) {
         this.editing[rowIndex + '-' + cell] = false;
-        let oldValue = this.products[rowIndex][cell];
+        let oldValue = this.rows[rowIndex][cell];
         let newValue = event.target.value;
 
         if(cell == 'category') {
@@ -219,12 +219,12 @@ export class PriceListComponent implements OnInit {
             newValue = selectedNewBrand;
         }
 
-        this.products[rowIndex][cell] = newValue;
+        this.rows[rowIndex][cell] = newValue;
 
-        this.productServices.updateProduct(this.products[rowIndex])
+        this.productServices.updateProduct(this.rows[rowIndex])
             .catch(error => {
                 this.commonServices.toastMessage(error.json().msg, 2000)
-                this.products[rowIndex][cell] = oldValue;
+                this.rows[rowIndex][cell] = oldValue;
             });
     }
 

@@ -52,18 +52,16 @@ export class SupplierListComponent implements OnInit {
 
     updateValue(event, cell, rowIndex) {
         let newValue = event.target.value;
-        let oldValue = this.suppliers[rowIndex][cell];
+        let oldValue = this.rows[rowIndex][cell];
 
         this.editing[rowIndex + '-' + cell] = false;
-        this.suppliers[rowIndex][cell] = newValue;
+        this.rows[rowIndex][cell] = newValue;
 
-        this.supplierServices.updateSupplier(this.suppliers[rowIndex])
+        this.supplierServices.updateSupplier(this.rows[rowIndex])
             .catch(error => {
                 this.commonServices.toastMessage(error.json().msg, 2000)
-                this.suppliers[rowIndex][cell] = oldValue;
+                this.rows[rowIndex][cell] = oldValue;
             });
-
-        this.suppliers = [...this.suppliers];
     }
 
 }

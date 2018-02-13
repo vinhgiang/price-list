@@ -7,7 +7,7 @@
     </div>
     <div class="form-group row">
         <ngx-datatable #categoriesTable class='material fullscreen' [headerHeight]="50" 
-            [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [rows]='rows' [selectionType]="'single'">
+            [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='rows' [selectionType]="'single'">
 
             <ngx-datatable-column name="No" [width]="50" prop="_id">
                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex + 1">

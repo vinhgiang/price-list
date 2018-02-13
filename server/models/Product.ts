@@ -57,6 +57,7 @@ export class Product extends ProductModel {
     }
 
     static updateProduct(id: string, data: object): Promise<IProduct | MongoError> {
+        data['last_update'] = Date.now();
         return Product.findByIdAndUpdate(id, data, { new: true })
                 .then((result: IProduct) => result)
                 .catch((error: MongoError) => error);

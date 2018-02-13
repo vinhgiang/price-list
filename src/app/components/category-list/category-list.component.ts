@@ -48,17 +48,15 @@ export class CategoryListComponent implements OnInit {
 
     updateValue(event, cell, rowIndex) {
         let newValue = event.target.value;
-        let oldValue = this.categories[rowIndex][cell];
+        let oldValue = this.rows[rowIndex][cell];
 
         this.editing[rowIndex + '-' + cell] = false;
-        this.categories[rowIndex][cell] = newValue;
+        this.rows[rowIndex][cell] = newValue;
 
-        this.categoryServices.updateCategory(this.categories[rowIndex])
+        this.categoryServices.updateCategory(this.rows[rowIndex])
             .catch(error => {
                 this.commonServices.toastMessage(error.json().msg, 2000)
                 this.categories[rowIndex][cell] = oldValue;
             });
-
-        this.categories = [...this.categories];
     }
 }

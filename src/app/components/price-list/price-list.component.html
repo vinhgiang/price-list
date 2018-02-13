@@ -48,7 +48,7 @@
     <div class="form-group row">
         <div class="col-12">
             <ngx-datatable #productsTable class="material fullscreen" [rows]="rows" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
-                [rowHeight]="40" [limit]="5" [selectionType]="'single'">
+                [rowHeight]="40" [limit]="10" [selectionType]="'single'">
 
                 <ngx-datatable-row-detail #myDetailRow (toggle)="onDetailToggle($event)">
                     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
@@ -147,7 +147,7 @@
                         />
                     </ng-template>
                 </ngx-datatable-column> -->
-                <ngx-datatable-column name="Last Update" [width]="300" prop="created">
+                <ngx-datatable-column name="Last Update" [width]="300" prop="last_update">
                     <ng-template ngx-datatable-cell-template let-value="value">
                         {{ value | date: 'dd/MM/yyyy HH:mm:ss' }}
                     </ng-template>
