@@ -167,7 +167,7 @@ export class PriceListComponent implements OnInit {
         const searchBrand = this.brand;
         const searchCategory = this.category;
         const searchSupplier = this.supplier;
-        const searchSku = this.sku;
+        const searchSku = this.sku.toUpperCase();
 
         if ( searchBrand || searchCategory || searchSupplier || searchSku ) {
             const temp = this.temp.filter(function (p: IProduct) {
@@ -184,10 +184,12 @@ export class PriceListComponent implements OnInit {
                     isCorrect = isCorrect && p.category._id == searchCategory;
                 }
                 if ( searchSku ) {
-                    isCorrect = isCorrect && p.sku == searchSku;
+                    let re = new RegExp(searchSku + '.*');
+                    let found = p.sku.match(re) != null ? true : false;
+                    isCorrect = isCorrect && found;
                 }
 
-                return isCorrect;                
+                return isCorrect;
             });
 
             // update the rows
