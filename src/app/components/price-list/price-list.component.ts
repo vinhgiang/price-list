@@ -149,7 +149,7 @@ export class PriceListComponent implements OnInit {
     }
 
     onSelectedSupplier(event: MatAutocompleteSelectedEvent): void {
-        this.supplier = event.option.value._id;
+        this.supplier = event.option.value;
         this.supplierCtrl.setValue(event.option.value);
     }
 
@@ -167,7 +167,7 @@ export class PriceListComponent implements OnInit {
         const searchBrand = this.brand;
         const searchCategory = this.category;
         const searchSupplier = this.supplier;
-        const searchSku = this.sku.toUpperCase();
+        const searchSku = this.sku;
 
         if ( searchBrand || searchCategory || searchSupplier || searchSku ) {
             const temp = this.temp.filter(function (p: IProduct) {
@@ -175,16 +175,16 @@ export class PriceListComponent implements OnInit {
                 let isCorrect = true;
 
                 if ( searchSupplier ) {
-                    isCorrect = p.suppliers.some(e => e == searchSupplier);
+                    isCorrect = p.suppliers.some(e => e._id == searchSupplier._id);
                 }
-                if ( searchBrand ) {
+                if ( searchBrand && p.brand ) {
                     isCorrect = isCorrect && p.brand._id == searchBrand;
                 }
-                if ( searchCategory ) {
+                if ( searchCategory && p.category ) {
                     isCorrect = isCorrect && p.category._id == searchCategory;
                 }
                 if ( searchSku ) {
-                    let re = new RegExp(searchSku + '.*');
+                    let re = new RegExp(searchSku.toUpperCase() + '.*');
                     let found = p.sku.match(re) != null ? true : false;
                     isCorrect = isCorrect && found;
                 }
