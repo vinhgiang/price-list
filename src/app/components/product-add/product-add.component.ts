@@ -103,6 +103,7 @@ export class ProductAddComponent implements OnInit {
             if( this.product ) {
                 this.brand = this.product.brand;
                 this.category = this.product.category;
+                this.product.name = this.product.name ? this.product.name : this.product.description;
             } else {
                 this.isValid = false;
                 this.commonServices.toastMessage('Product not found.', 4000);
