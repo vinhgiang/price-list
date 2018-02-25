@@ -241,60 +241,59 @@ export class PriceListComponent implements OnInit {
     toggleExpandRow(row: IProduct, expanded) {
         const version = row.version;
 
+        const priceList = [];
+        row.suppliers.forEach((supplier: ISupplier) => {
+            let item = {
+                'supplier': supplier,
+                'price': ''
+            }
+            priceList.push(item);
+        });
+
         if( version > 0 && ! expanded ) {
             const productId = row._id;
             this.productServices.getProductPrice(productId, version)
                 .then(async res => {
-                    const priceList = res.result;
+                    const curPriceList = res.result;
                     const newPriceList = [];
                     let versionList;
-                    
-                    if ( version > 1) {
+
+                    if ( version > 1 ) {
                         let previousVersion: number[] = [];
                         for ( let i = 1; i <= 3 && version - i > 0; i++ ) {
                             previousVersion.push(version - i);
                         }
 
-                        versionList = await this.productServices.getProductPrice(productId, previousVersion);
+                        versionList = await this.productServices.getProductPrice( productId, previousVersion );
                         versionList = versionList.result;
                     }
 
-                    priceList.forEach( (e: IProductSupplier ) => {
+                    priceList.forEach( e => {
                         let priceVersion = [];
                         if( versionList ) {
                             versionList.forEach( (v: IProductSupplier) => {
-                                if( v.supplier_id._id == e.supplier_id._id ) {
+                                if( v.supplier_id._id == e.supplier._id ) {
                                     priceVersion.push(v);
                                 }
                             });
                         }
 
-                        let item = {
-                            'supplier': e.supplier_id,
-                            'price': e.price,
-                            'version': priceVersion
-                        };
-                        newPriceList.push(item);
+                        curPriceList.forEach( ( i: IProductSupplier) => {
+                            if ( i.supplier_id._id == e.supplier._id ) {
+                                e.price = i.price;
+                                e.version = priceVersion;
+                            }
+                        })
                     });
-
-                    row.price_list = newPriceList;
-                    this.table.rowDetail.toggleExpandRow(row);
                 })
                 .catch(error => {
-                    this.commonServices.toastMessage(error.json().msg, 2000)
+                    this.commonServices.toastMessage(error, 2000)
                 });
-        } else {
-            const priceList = [];
-            row.suppliers.forEach((supplier: ISupplier) => {
-                let item = {
-                    'supplier': supplier,
-                    'price': ''
-                }
-                priceList.push(item);
-            });
-            row.price_list = priceList;
-            this.table.rowDetail.toggleExpandRow(row);
         }
+        
+        row.price_list = priceList;
+        this.table.rowDetail.toggleExpandRow(row);
+
     }
     
     onDetailToggle(event) {

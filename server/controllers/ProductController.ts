@@ -114,19 +114,26 @@ export class ProductController {
 
         const newPriceList = [];
         price_list.forEach(e => {
-            let productSupplier = {
-                product_id: _id,
-                supplier_id: e.supplier._id,
-                price: parseFloat( e.price ),
-                version: newVersion
+            if ( e.price != '' ) {
+                let productSupplier = {
+                    product_id: _id,
+                    supplier_id: e.supplier._id,
+                    price: parseFloat( e.price ),
+                    version: newVersion
+                }
+                newPriceList.push(productSupplier);
             }
-            newPriceList.push(productSupplier);
         })
 
         try {
-            const updateProduct = await Product.updateProduct(_id, { version: newVersion });
-            const result = await ProductSupplier.createProductSupplier(newPriceList);
-            return ProductController.resolveAPIResponse(res, result);
+            if ( newPriceList.length > 0 ) {
+                const updateProduct = await Product.updateProduct(_id, { version: newVersion });
+                const result = await ProductSupplier.createProductSupplier(newPriceList);
+
+                return ProductController.resolveAPIResponse(res, result);
+            }
+            let error = new MongoError('There is nothing to update.');
+            return ProductController.resolveAPIResponse(res, error);
         } catch (e) {
             return ProductController.resolveErrorResponse(res, 'Could not update product version. ' + e.message, 400);
         }
