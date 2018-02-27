@@ -1,0 +1,41 @@
+<h1 class="page-header">List of Option</h1>
+<div>
+    <div class="form-group row">
+        <div class="col-12">
+            <input type='text' class="realtime-filter" placeholder='Type to filter the name column' (keyup)='updateFilter($event)' />
+        </div>
+    </div>
+    <div class="form-group row">
+        <ngx-datatable #categoriesTable class='material fullscreen' [headerHeight]="50" 
+            [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='rows' [selectionType]="'single'">
+
+            <ngx-datatable-column name="No" [width]="50" prop="_id">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex + 1">
+                    {{rowIndex}}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Name" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span title="Double click to edit" (dblclick)="editing[rowIndex + '-name'] = true" *ngIf=" ! editing[rowIndex + '-name']">
+                        {{value}}
+                    </span>
+                    <input autofocus (blur)="updateValue($event, 'name', rowIndex)" *ngIf="editing[rowIndex+ '-name']" type="text" [value]="value" />
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Key" [width]="200">
+                {{ value }}
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Value" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span class='editable-field' title="Double click to edit" (dblclick)="editing[rowIndex + '-value'] = true" *ngIf=" ! editing[rowIndex + '-value']">
+                        {{ value }}
+                    </span>
+                    <input autofocus (blur)="updateValue($event, 'value', rowIndex)" *ngIf="editing[rowIndex+ '-value']" type="text" [value]="value" />
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+</div>
