@@ -21,9 +21,15 @@ export class OptionServices {
         .then(response => response.json());
     }
 
-    updateOption(option: IOption) {
+    updateOption( option: IOption ) {
         const url = this.modelUrl + '/edit';
         return this.http.post( url, option, { headers: this.headers } ).toPromise()
             .then( response => response.json() )
+    }
+
+    createOption( option: IOption ) {
+        const url = this.modelUrl + '/add';
+        return this.http.post(url, option, {headers: this.headers}).toPromise()
+            .then(response => response.json);
     }
 }

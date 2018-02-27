@@ -13,6 +13,7 @@ import { BrandAddComponent } from './components/brand-add/brand-add.component';
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { CategoryAddComponent } from './components/category-add/category-add.component';
 import { OptionListComponent } from './components/option-list/option-list.component';
+import { OptionAddComponent } from './components/option-add/option-add.component';
 
 import { MatButtonModule, MatIconModule, MatCheckboxModule, MatSelectModule, MatAutocompleteModule, MatInputModule, MatSnackBarModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +32,7 @@ const config: Routes = [
     { path: 'category/list', component: CategoryListComponent },
     { path: 'category/add', component: CategoryAddComponent },
     { path: 'option/list', component: OptionListComponent },
+    { path: 'option/add', component: OptionAddComponent },
     { path: '**', component: FourOFourComponent }
 ];
 
@@ -45,7 +47,8 @@ const config: Routes = [
         BrandAddComponent,
         CategoryListComponent,
         CategoryAddComponent,
-        OptionListComponent
+        OptionListComponent,
+        OptionAddComponent
     ],
     imports: [
         CommonModule,
