@@ -12,6 +12,7 @@ export interface IProduct extends Document {
     brand: IBrand;
     suppliers: ISupplier[];
     price: number;
+    wnp: number;
     previous_price: number;
     version: number;
     created: Date;
@@ -28,6 +29,7 @@ const ProductSchema = new Schema({
     suppliers: [{ type: Schema.Types.ObjectId, ref: 'Supplier' }],
     previous_price: { type: Number, default: 0 },
     price: { type: Number },
+    wnp: { type: Number },
     version: { type: Number, default: 0 },
     created: { type: Date, default: Date.now },
     last_update: { type: Date, default: Date.now },

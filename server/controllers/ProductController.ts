@@ -3,7 +3,8 @@ import { IProduct, Product } from "../models/Product";
 import { IProductSupplier, ProductSupplier } from '../models/Product-Supplier';
 import { MongoError } from "mongodb";
 import * as moment from 'moment';
-import { ISupplier } from "../models/Supplier";
+import { ISupplier } from '../models/Supplier';
+import { IOption, Option } from '../models/Option';
 
 export class ProductController {
     private static resolveErrorResponse(res: Response, msg: string, statusCode: number): Response {
@@ -76,15 +77,14 @@ export class ProductController {
 
     async update(req: Request, res: Response): Promise<Response> {
         const { _id, sku, name, description, category, brand, suppliers } = req.body;
-        // TO-DO: update lowest price from suppliers
         const price = 0;
         
         if ( ! sku ) {
             return ProductController.resolveErrorResponse(res, 'SKU cannot be emptied', 400);
         }
-        // if ( ! name ) {
-        //     return ProductController.resolveErrorResponse(res, 'Name cannot be emptied', 400);
-        // }
+        if ( ! name ) {
+            return ProductController.resolveErrorResponse(res, 'Name cannot be emptied', 400);
+        }
         if ( ! category ) {
             return ProductController.resolveErrorResponse(res, 'Category cannot be emptied', 400);
         }
@@ -112,6 +112,7 @@ export class ProductController {
         const { _id, price_list, version } = req.body;
         const newVersion = version + 1;
 
+        let lowestPrice;
         const newPriceList = [];
         price_list.forEach(e => {
             if ( e.price != '' ) {
@@ -122,12 +123,30 @@ export class ProductController {
                     version: newVersion
                 }
                 newPriceList.push(productSupplier);
+
+                // get lowestPrice to calculate Website Net Price (WNP)
+                lowestPrice = productSupplier.price < lowestPrice || ! lowestPrice ? productSupplier.price : lowestPrice;
             }
         })
 
         try {
             if ( newPriceList.length > 0 ) {
-                const updateProduct = await Product.updateProduct(_id, { version: newVersion });
+
+                // Calculate WNP
+                let shippingFeeObj = await Option.getOption('shipping_fee');
+                let paypalPercentObj = await Option.getOption('paypal_percent');
+                let paypalFixedObj = await Option.getOption('paypal_fixed');
+                let paypalExchangeRateObj = await Option.getOption('paypal_exchange_rate');
+
+                let shippingFee = ! ( shippingFeeObj instanceof MongoError ) ? parseFloat( shippingFeeObj.value ) : 0;
+                let paypalPercent = ! ( paypalPercentObj instanceof MongoError ) ? parseFloat( paypalPercentObj.value ) : 0;
+                let paypalFixed = ! ( paypalFixedObj instanceof MongoError ) ? parseFloat( paypalFixedObj.value ) : 0;
+                let paypalExchangeRate = ! ( paypalExchangeRateObj instanceof MongoError ) ? parseFloat( paypalExchangeRateObj.value ) : 0;
+                
+                let wnp = ( lowestPrice + shippingFee + paypalFixed ) / ( ( 1 - ( paypalPercent / 100 ) ) * paypalExchangeRate );
+                wnp = Math.round(wnp * 100) / 100;
+                
+                const updateProduct = await Product.updateProduct(_id, { price: lowestPrice, wnp, version: newVersion });
                 const result = await ProductSupplier.createProductSupplier(newPriceList);
 
                 return ProductController.resolveAPIResponse(res, result);

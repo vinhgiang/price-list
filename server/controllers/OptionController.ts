@@ -46,7 +46,7 @@ export class OptionController {
     }
 
     async select( req: Request, res: Response ): Promise<Response> {
-        const result = await Option.getOption();
+        const result = await Option.getOptions();
         return OptionController.resolveAPIResponse(res, result);
     }
 

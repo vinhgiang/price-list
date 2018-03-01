@@ -2,9 +2,9 @@ import { Schema, model, Document } from 'mongoose';
 import { MongoError } from 'mongodb';
 
 export interface IOption extends Document {
-    name: String;
-    key: String;
-    value: String;
+    name: string;
+    key: string;
+    value: string;
 }
 
 const optionSchema = new Schema({
@@ -23,9 +23,15 @@ export class Option extends OptionModel {
             .catch( ( error: MongoError ) => error );
     }
 
-    static getOption() : Promise<IOption | IOption[] | MongoError> {
+    static getOptions(): Promise<IOption[] | MongoError> {
         return OptionModel.find()
             .then( ( result: IOption[] ) => result )
+            .catch( ( error: MongoError) => error );
+    }
+
+    static getOption(key: string): Promise<IOption | MongoError> {
+        return OptionModel.findOne({ key: key })
+            .then( ( result: IOption ) => result )
             .catch( ( error: MongoError) => error );
     }
 
