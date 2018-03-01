@@ -12,6 +12,7 @@ export interface IProduct {
     category: ICategory;
     brand: IBrand;
     price: number;
+    wnp: number;
     version?: number;
     last_update?: Date;
     created?: Date;
@@ -34,7 +35,8 @@ export class Product {
             suppliers: null,
             brand: null,
             category: null,
-            price: 0
+            price: 0,
+            wnp: 0
         };
     }
 }

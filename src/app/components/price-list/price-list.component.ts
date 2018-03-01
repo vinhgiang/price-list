@@ -303,8 +303,17 @@ export class PriceListComponent implements OnInit {
     updatePrice(row: IProduct) {
         const product = row;
         this.productServices.updateProductPrice(product)
+            .then(result => {
+                const updatedProduct: IProduct = result.result;
+
+                row.version = updatedProduct.version;
+                row.price = updatedProduct.price;
+                row.wnp = updatedProduct.wnp;
+
+                this.commonServices.toastMessage('Updated', 2000);
+            })
             .catch(error => {
-                this.commonServices.toastMessage(error.json().msg, 2000)
+                this.commonServices.toastMessage(error.json().msg, 2000);
             });
     }
 

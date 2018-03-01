@@ -149,7 +149,7 @@ export class ProductController {
                 const updateProduct = await Product.updateProduct(_id, { price: lowestPrice, wnp, version: newVersion });
                 const result = await ProductSupplier.createProductSupplier(newPriceList);
 
-                return ProductController.resolveAPIResponse(res, result);
+                return ProductController.resolveAPIResponse(res, updateProduct);
             }
             let error = new MongoError('There is nothing to update.');
             return ProductController.resolveAPIResponse(res, error);
